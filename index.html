@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Jpack 3.4 · Prospección</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+<style>
+:root{--bg:#F3F1EC;--s:#fff;--s2:#F8F7F3;--tx:#1B1F1D;--dim:#626A66;--bd:#DEDBD2;--ac:#0F6E56;--acd:#DDF1EA;--yl:#8A5A00;--yb:#FDF0CF;--rd:#B42318;--rb:#FCE6E3;--bl:#1D4ED8;--bb:#E3EBFD}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#121513;--s:#1A1E1C;--s2:#222725;--tx:#E8ECE9;--dim:#9AA39E;--bd:#2E3532;--ac:#4FC9A4;--acd:#16322A;--yl:#F2C94C;--yb:#3A2E0D;--rd:#F28B82;--rb:#3A1A17;--bl:#8AA8FF;--bb:#1E2747}}
+:root[data-theme=dark]{--bg:#121513;--s:#1A1E1C;--s2:#222725;--tx:#E8ECE9;--dim:#9AA39E;--bd:#2E3532;--ac:#4FC9A4;--acd:#16322A;--yl:#F2C94C;--yb:#3A2E0D;--rd:#F28B82;--rb:#3A1A17;--bl:#8AA8FF;--bb:#1E2747}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:14px/1.45 -apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:var(--s);border-bottom:1px solid var(--bd);padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.row{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:8px}
+.logo{width:32px;height:32px;border-radius:6px;background:var(--ac);color:var(--s);display:grid;place-items:center;font-weight:800}
+h1{font-size:16px;margin:0;margin-right:auto}h1 small{display:block;font-weight:400;color:var(--dim);font-size:11.5px}
+.ib{width:36px;height:36px;border:1px solid var(--bd);background:var(--s2);border-radius:6px}
+main{max-width:1100px;margin:0 auto;padding:12px 14px 60px}
+#st{font-size:12px;margin:2px 0 10px;color:var(--dim)}#st.ok{color:var(--ac)}#st.bad{color:var(--rd)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:9px 12px}.kpi b{font-size:20px;display:block}.kpi span{font-size:11.5px;color:var(--dim);display:block}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}
+.tab{white-space:nowrap;border:1px solid var(--bd);background:var(--s);color:var(--dim);border-radius:16px;padding:6px 13px;font-weight:600}.tab.on{background:var(--ac);border-color:var(--ac);color:var(--s)}
+.fil{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.fil input,.fil select{padding:8px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--s)}.fil input{flex:1;min-width:150px}
+.btn{border:1px solid var(--bd);background:var(--s2);border-radius:6px;padding:8px 13px;font-weight:600;text-decoration:none;display:inline-block}.btn.p{background:var(--ac);border-color:var(--ac);color:var(--s)}.btn.d{color:var(--rd);border-color:var(--rd)}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:11px 13px;margin-bottom:8px}
+.top{display:flex;justify-content:space-between;gap:8px}.card h3{margin:0;font-size:14.5px}.meta{color:var(--dim);font-size:12px;margin-top:2px}
+.pill{height:fit-content;padding:2px 9px;border-radius:12px;font-size:11.5px;font-weight:700;background:var(--s2);color:var(--dim)}
+.pill.contactado{background:var(--yb);color:var(--yl)}.pill.interesado{background:var(--bb);color:var(--bl)}.pill.cliente{background:var(--acd);color:var(--ac)}.pill.descartado{background:var(--rb);color:var(--rd)}
+.pend{font-size:11px;color:var(--yl);font-weight:700}
+.act{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.act .btn{padding:5px 10px;font-size:12px}
+.empty{padding:30px;text-align:center;color:var(--dim)}
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;place-items:center;padding:14px;z-index:50}.mb.on{display:grid}
+.md{background:var(--s);border:1px solid var(--bd);border-radius:10px;padding:18px;width:100%;max-width:470px;max-height:90vh;overflow:auto}.md h2{margin:0 0 10px;font-size:16px}
+.f{margin-bottom:9px}.f label{display:block;font-size:12px;color:var(--dim);margin-bottom:3px}.f input,.f select,.f textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--s2)}
+.ma{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}
+#toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--s);padding:8px 14px;border-radius:6px;z-index:99;display:none;font-size:13px}
+.bdg{position:absolute;top:-6px;right:-6px;background:var(--rd);color:#fff;border-radius:10px;font-size:11px;font-weight:700;min-width:18px;padding:0 5px;line-height:18px;display:none}
+.gh{font-weight:700;margin:12px 0 6px;font-size:13px}.gh.late{color:var(--rd)}.ag{border:1px solid var(--bd);border-radius:6px;padding:9px 11px;margin-bottom:6px;background:var(--s2)}.ag .act{margin-top:6px}
+.seg{background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:14px;margin-bottom:10px}.seg h3{margin:0 0 6px;font-size:15px}.seg .lb{font-size:12px;font-weight:700;color:var(--dim);margin-top:10px}.seg ul{margin:3px 0 0;padding-left:18px}.pitch{background:var(--acd);color:var(--ac);padding:8px 10px;border-radius:6px;margin-top:8px;font-weight:600}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}th{color:var(--dim);font-size:12px}
+.sw{display:flex;gap:6px;margin-bottom:10px}.pg{height:7px;background:var(--s2);border:1px solid var(--bd);border-radius:4px;overflow:hidden;margin-top:6px}.pg i{display:block;height:100%}.sec{background:var(--s);border:1px solid var(--bd);border-radius:6px;padding:12px;margin-bottom:10px}.sec h3{margin:0 0 8px;font-size:14.5px}.sec .kpis{margin-bottom:0}.warn{background:var(--yb);color:var(--yl);border-radius:6px;padding:9px 12px;margin-bottom:10px;font-weight:600}
+/* centrado y ajuste de cifras */
+.kpi{text-align:center;min-width:0}.kpi b{font-size:clamp(15px,4.8vw,20px);overflow-wrap:anywhere;line-height:1.25}
+#dK{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+#dash table th,#dash table td{text-align:center;vertical-align:middle}
+#dash .tw select{max-width:100%}
+/* controles nativos y campos con el tema */
+:root{color-scheme:light dark}:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+select,input,textarea{color:var(--tx)}select option{background:var(--s);color:var(--tx)}
+#dash .tw input,#dash .tw select{background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 8px}
+.stin{width:84px;text-align:center}
+.hb{display:grid;grid-template-columns:110px 1fr 150px;gap:8px;align-items:center;margin:4px 0;font-size:12.5px}.hb>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb b{text-align:right;font-weight:600}
+.tr{height:14px;background:var(--s2);border:1px solid var(--bd);border-radius:4px;overflow:hidden}.tr i{display:block;height:100%}
+.sdot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.rep h2{margin:0 0 4px}.rep h3{font-size:14px;margin:14px 0 6px}.rep .kpis{margin-bottom:6px}
+@media print{body.pr header,body.pr main,body.pr #toast,body.pr .mb:not(#mRep){display:none!important}body.pr #mRep{position:static;display:block;background:none;padding:0}body.pr #mRep .md{border:0;max-width:none;max-height:none;overflow:visible}body.pr #mRep .ma{display:none}}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+</style></head><body>
+<div id="toast"></div>
+<header><div class="row"><div class="logo">J</div><h1>Jpack 3.4<small>Prospección · envases PP/PE · Chile</small></h1>
+<button class="ib" id="bAg" title="Agenda de seguimientos" style="position:relative">📅<span id="bAgN" class="bdg"></span></button><button class="ib" id="bSync" title="Sincronizar">⟳</button><button class="ib" id="bCfg" title="Conectar Google Sheets">☁️</button><button class="ib" id="bBk" title="Respaldo e importación (CSV)">💾</button><button class="ib" id="bTheme" title="Tema">🌙</button></div></header>
+<main>
+<div id="st">Sin conectar</div>
+<div class="sw"><button class="tab on" data-v="pros">👥 Prospección</button><button class="tab" data-v="dash">📊 Dashboard</button></div>
+<div class="kpis" id="kpis"></div>
+<div class="tabs" id="tabs"></div>
+<div class="fil" id="fil"><input id="q" placeholder="Buscar empresa o contacto…"><select id="fr"><option value="">Todas las regiones</option></select><select id="fc"><option value="">Todas las comunas</option></select><select id="frubro"><option value="">Todos los rubros</option></select><select id="fprod"><option value="">Todos los productos</option><option value="Potes PP">Potes PP</option><option value="Bandejas">Bandejas</option><option value="Copas PP">Copas PP</option><option value="Bachas">Bachas</option></select><select id="fprio"><option value="">Toda prioridad</option><option value="Alto">Alto</option><option value="Medio">Medio</option><option value="Bajo">Bajo</option></select><select id="fe"><option value="">Todos los estados</option></select><label style="display:flex;align-items:center;gap:4px;font-size:12px;white-space:nowrap"><input type="checkbox" id="fatras"> Solo atrasados</label><button class="btn" id="bExpFil">⬇️ CSV filtrado</button><button class="btn p" id="bAdd">＋ Añadir prospecto</button></div>
+<div id="list"></div><div id="ruta" style="display:none"></div><div id="guia" style="display:none"></div>
+<div id="dash" style="display:none">
+<div id="dWarn"></div>
+<div class="fil"><select id="dV"></select><select id="dP"></select><button class="btn p" id="dAddR">＋ Registro diario</button><button class="btn" id="dAddM">🎯 Meta del mes</button><button class="btn" id="dRep">📄 Informe</button></div>
+<div class="kpis" id="dK"></div>
+<div class="sec"><h3>Semáforo por vendedor</h3><div class="sub" style="font-size:12px;color:var(--dim);margin-bottom:6px">🟢 proyecta ≥100% de la meta · 🟡 85–99,9% (puede salvarse o caer) · 🔴 &lt;85%</div><div class="tw" id="dS"></div></div>
+<div class="sec"><h3>Meta vs venta neta · últimos 6 meses</h3><div id="dT"></div></div>
+<div class="sec"><h3>Meta semanal de prospección</h3>
+<div class="fil"><label style="font-size:12px;color:var(--dim)">Contactos meta</label><input id="wgContactos" type="number" min="0" style="width:80px" value="40">
+<label style="font-size:12px;color:var(--dim)">Interesados meta</label><input id="wgInteres" type="number" min="0" style="width:80px" value="10">
+<button class="btn p" id="wgSave">Guardar meta</button></div>
+<div class="kpis" id="dW"></div></div>
+<div class="sec"><h3>Embudo de prospección</h3><div class="kpis" id="dF"></div></div>
+<div class="sec"><h3>Embudo por región</h3><div class="tw" id="dFR"></div></div>
+<div class="sec"><h3>Registros diarios</h3><div class="tw" id="dR"></div></div>
+<div class="sec"><h3>Metas</h3><div class="tw" id="dM"></div></div>
+</div>
+
+</main>
+
+<div class="mb" id="mCfg"><div class="md"><h2>☁️ Conectar Google Sheets</h2>
+<div class="f"><label>Enlace de la Google Sheet</label><input id="cSheet" placeholder="https://docs.google.com/spreadsheets/d/…" autocomplete="off"></div>
+<div class="f"><label>URL del Apps Script (termina en /exec)</label><input id="cUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></div>
+<div id="cMsg" class="meta" style="margin-top:8px;word-break:break-all"></div>
+<div class="ma"><button class="btn" id="cTest">🔌 Probar conexión</button><button class="btn" id="cShare">📲 Enlace para otro equipo</button><button class="btn" id="cBase">Restaurar base</button><button class="btn d" id="cOff">Desconectar</button><button class="btn" data-x>Cancelar</button><button class="btn p" id="cOk">Conectar y cargar</button></div></div></div>
+
+<div class="mb" id="mAg"><div class="md"><h2>📅 Agenda de seguimientos</h2>
+<div class="f"><label>Ver solo un día</label><div style="display:flex;gap:8px"><input type="date" id="agD" style="flex:1"><button class="btn" id="agAll" type="button">Ver todos</button></div></div>
+<div id="agL"></div><div class="ma"><button class="btn p" data-x>Cerrar</button></div></div></div>
+
+<div class="mb" id="mBk"><div class="md"><h2>💾 Respaldo e importación</h2>
+<div style="font-size:12px;color:var(--dim);margin-bottom:10px">Exporta a CSV o importa CSV/Excel exportado. Para cargar el listado de 251 prospectos: abre el xlsx → Guardar como CSV → Importar aquí. Columnas: ID, Fuente, Tipo, Empresa, Región / Comuna, Dirección, Contacto, Teléfono, Correo, Detalle / Oportunidad, Estado, Próximo seguimiento, Notas, Prioridad.</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="btn" id="xPros">⬇️ Prospectos</button><button class="btn" id="xReg">⬇️ Registros</button><button class="btn" id="xMet">⬇️ Metas</button></div>
+<div class="f"><label>Importar prospectos (CSV con encabezados de la Sheet: ID, Estado, Próximo seguimiento, Notas…)</label><input type="file" id="iPros" accept=".csv,text/csv"></div>
+<div class="f"><label>Importar registros diarios (CSV: Fecha, Vendedor, Visitados, Venta total sin IVA…)</label><input type="file" id="iReg" accept=".csv,text/csv"></div>
+<div id="bkMsg" style="font-size:12.5px;margin-top:8px"></div>
+<div class="modal-actions" style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn primary p" data-x>Cerrar</button></div></div></div>
+
+<div class="mb" id="mRep"><div class="md" style="max-width:640px"><div class="rep" id="repBody"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px" class="ma"><button class="btn" id="rJpg">🖼️ JPG</button><button class="btn" id="rPdf">🖨️ PDF</button><a class="btn" id="rWa" target="_blank" rel="noopener">📲 WhatsApp</a><button class="btn" id="rCp">📋 Copiar</button><button class="btn p" data-x>Cerrar</button></div></div></div>
+
+<div class="mb" id="mRec"><div class="md"><h2 id="rT">＋ Registro diario</h2><div id="rF"></div><datalist id="vl"></datalist>
+<div class="ma"><button class="btn d" id="rDel">Eliminar</button><button class="btn" data-x>Cancelar</button><button class="btn p" id="rOk">Guardar</button></div></div></div>
+
+<div class="mb" id="mMet"><div class="md"><h2 id="mT">🎯 Meta del mes</h2><div id="mF"></div>
+<div class="ma"><button class="btn d" id="mDel">Eliminar</button><button class="btn" data-x>Cancelar</button><button class="btn p" id="mOk">Guardar</button></div></div></div>
+
+<div class="mb" id="mDup"><div class="md" style="max-width:720px"><h2>⚠️ Posibles contactos duplicados</h2><div id="dupF"></div><div class="ma"><button class="btn p" data-x>Cerrar</button></div></div></div>
+
+<div class="mb" id="mEd"><div class="md"><h2 id="eT">Prospecto</h2><div id="eF"></div>
+<div class="ma"><button class="btn d" id="eDel">Eliminar</button><button class="btn" data-x>Cancelar</button><button class="btn p" id="eOk">Guardar</button></div></div></div>
+
+<script>
+const F=['id','fuente','tipo','nombre','region','direccion','contacto','telefono','correo','detalle','estado','fecha','notas','prioridad','foto'];
+const ST=['nuevo','contactado','interesado','cliente','descartado'];
+const PRIO=['','Alto','Medio','Bajo'];
+const PRODS=['','Potes PP','Bandejas','Copas PP','Bachas'];
+const TABS=[['todos','Todos'],['hoy','📅 Ruta hoy'],['fabrica','🍦 Fábricas'],['distribuidor','📦 Distribuidores'],['manual','✍️ Manuales'],['guia','📋 Guía de venta']];
+const FORM=[['nombre','Empresa / prospecto *','text'],['tipo','Tipo','sel'],['region','Región / Comuna','text'],['direccion','Dirección','text'],['contacto','Contacto','text'],['telefono','Teléfono','tel'],['correo','Correo','email'],['detalle','Detalle / oportunidad','area'],['prioridad','Prioridad','prio'],['estado','Estado','est'],['fecha','Próximo seguimiento','date'],['notas','Notas','area'],['foto','URL foto del local (opcional)','text']];
+const K={cfg:'jpack3_cfg',cache:'jpack3_cache',queue:'jpack3_queue',theme:'jpack3_theme',recs:'jpack3_recs',mets:'jpack3_mets',qR:'jpack3_qr',qM:'jpack3_qm',wgoal:'jpack3_wgoal',dups:'jpack3_dup_resolved',route:'jpack34_route'};
+const SEED_RAW=`@F
+Helados La Plaza|Cerrillos (RM)|Av. Buzeta 4624|+56 2 2683 1873|info@heladoslaplaza.cl|Sin dato|Planta certificada HACCP (Venta mayor/menor)
+Helados La Foca|Pudahuel (RM)|Av. San Pablo 9901||info@lafoca.cl|Sin dato|Fábrica, distribución masiva y marcas propias
+Helados Timaukel|Maipú (RM)|Av. El Rosal 5630||ayudatiendaonline@heladostimaukel.cl|Sin dato|Elaboración artesanal para heladerías y café
+Porteña de Corazón|Valparaíso|Pasaje Gálvez 199, L. 6|||Gina (Propietaria)|Fábrica local y helados de especialidad
+Heladería El Gelatto|Vicuña (Coquimbo)|Gabriela Mistral 436|+56 9 4242 3465|veronicacortesgonzales132@gmail.com|Verónica Cortés G.|Producción y venta local en Vicuña
+Helados Assuan|Concepción (Biobío)|Chacabuco 1246 / Barros Arana 244|+56 41 316 2147||Sin dato|Producción y venta artesanal tradicional
+Heladería Soñao (H. Pucón)|Pucón (Araucanía)|Av. Bernardo O'Higgins 415|+56 9 9731 6982|heladeria.pucon@gmail.com|Sin dato|Fábrica artesanal y distribución comercial
+Heladería Pudú|Pucón (Araucanía)|Lincoyán 291|+56 65 277 3683|contacto@heladospudu.cl|Sin dato|Heladería y elaboración artesanal
+Pim's Helados Artesanales|Puerto Varas (Los Lagos)|Santa Rosa 580|+56 9 2880 4382|gastronomicasb.spa@gmail.com|Sin dato|Gastronómica y fábrica de helados
+#XV|Región de Arica y Parinacota
+Distribuidora Yuraszeck|Av. Santa María 2140, Arica|+56 58 225 1100|contacto@yuraszeck.cl|Carlos Yuraszeck (Gte. Com.)
+Plásticos Arica Mayorista|Av. Diego Portales 1420, Arica|+56 58 222 4100|ventas@plasticosarica.cl|
+Comercializadora Chinchorro Pack|Calle Maipú 540, Arica|+56 58 223 8810|ventas@chinchorropack.cl|Hernán Silva
+Distribuidora Del Norte Insumos|Av. General Velásquez 890, Arica|+56 58 221 3344|contacto@delnorteinsumos.cl|
+Arica Packaging B2B|Benjamín Vicuña Mackenna 320, Arica|+56 58 224 5590|contacto@aricapackaging.cl|Marcela Torres
+Multienvases Puerta Norte|Av. Argentina 1120, Arica|+56 58 226 7711|ventas@puertanortepack.cl|
+Distribuidora Morro Envases|San Marcos 450, Arica|+56 58 225 9000|contacto@morroenvases.cl|
+Insumos Gastronómicos Arica|Pedro Montt 780, Arica|+56 58 222 1155|ventas@insumosarica.cl|Rodrigo Fuentes
+Comercial Parinacota Plásticos|Av. Renato Rocca 1650, Arica|+56 58 228 3340|contacto@parinacotaplasticos.cl|
+Servicios y Envases Azapa|Km 3 Valle de Azapa, Arica|+56 58 229 1020|ventas@azapapack.cl|
+#I|Región de Tarapacá
+Diplas Iquique (ZOFRI)|Circunvalación 1850, Iquique|+56 57 242 8890|ventas@diplasiquique.cl|Marcela Rojas (Jefa Compras)
+Comercializadora Tarapacá Pack|Av. Arturo Prat 1050, Iquique|+56 57 231 1120|contacto@tarapacapack.cl|Hernán Araya
+Distribuidora Zofri Packaging|Recinto Sazié Galpón 12, Iquique|+56 57 241 5500|ventas@zofripackaging.cl|
+Plásticos Cavancha|Av. Héroes de la Concepción 2450, Iquique|+56 57 233 4411|contacto@plasticoscavancha.cl|
+Iquique Envases y Doblados|Calle Tarapacá 890, Iquique|+56 57 232 6600|ventas@iquiqueenvases.cl|Esteban Morales
+Distribuidora Alto Hospicio Pack|Av. Las Parcelas 3100, Alto Hospicio|+56 57 251 2233|contacto@hospiciopack.cl|
+Comercial Tamarugal Insumos|Av. Ramón Pérez Zujovic 420, Alto Hospicio|+56 57 253 1100|ventas@tamarugalinsumos.cl|
+Norte Mar Envases|Manuel Rodríguez 540, Iquique|+56 57 238 9944|contacto@nortemarenvases.cl|
+Distribuidora Zofri Plásticos|Manzana 4 Local 15 Zofri, Iquique|+56 57 243 2200|ventas@zofriplasticos.cl|Claudia Godoy
+Empaques del Tamarugal|Los Naranjos 1280, Alto Hospicio|+56 57 254 8890|contacto@empaquestamarugal.cl|
+#II|Región de Antofagasta
+Distribuidora El Minero|Pedro Aguirre Cerda 8120, Antofagasta|+56 55 264 3000|ventas@elmineropack.cl|Fernando Silva (Subgerente)
+Antofagasta Envases|Av. Industrial 450, Antofagasta|+56 55 228 9911|contacto@antofagastaenvases.cl|
+Plásticos Calama Mayorista|Av. Gran Chaco 1420, Calama|+56 55 234 5500|ventas@plasticoscalama.cl|Gonzalo Vera
+Comercializadora La Portada Pack|Av. Balmaceda 2150, Antofagasta|+56 55 225 3300|contacto@laportadapack.cl|
+Distribuidora El Sol Plásticos|Calle Prat 680, Antofagasta|+56 55 222 1188|ventas@elsolplasticos.cl|
+Loa Envases e Insumos|Av. Chorrillos 890, Calama|+56 55 231 9922|contacto@loaenvases.cl|
+Norte Grande Packaging B2B|Av. Antonio Rendic 4500, Antofagasta|+56 55 229 4400|ventas@nortegrandepack.cl|Patricia Fuentealba
+Tocopilla Insumos Descartables|21 de Mayo 420, Tocopilla|+56 55 281 1200|contacto@tocopillainsumos.cl|
+Distribuidora San Pedro Pack|Licancabur 340, Calama|+56 55 236 7711|ventas@sanpedropack.cl|
+Desert Packaging Antofagasta|Av. Grecia 1850, Antofagasta|+56 55 226 8833|contacto@desertpackaging.cl|
+#III|Región de Atacama
+Distribuidora Plásticos Copiapó|Los Carrera 1450, Copiapó|+56 52 221 4500|contacto@plasticoscopiapo.cl|Patricia Fuentealba (Compras)
+Atacama Pack Mayorista|Chañarcillo 680, Copiapó|+56 52 223 1040|ventas@atacamapack.cl|
+Distribuidora Vallenar Plásticos|Av. Brasil 420, Vallenar|+56 51 261 3300|contacto@vallenarplasticos.cl|
+Comercial Atacama Envases|Rodriguez 890, Copiapó|+56 52 222 5590|ventas@atacamaenvases.cl|Jorge Plaza
+Desierto Florido Packaging|Av. Henríquez 1120, Copiapó|+56 52 224 8811|contacto@desiertofloridopack.cl|
+Caldera Insumos Mar|Av. Wheelwright 340, Caldera|+56 52 231 1500|ventas@calderainsumos.cl|
+Distribuidora Huasco Pack|Larraín Alcalde 210, Huasco|+56 51 253 2200|contacto@huascopack.cl|
+Plásticos Copiapó Centro|Chacabuco 540, Copiapó|+56 52 221 9933|ventas@copiapocentro.cl|
+Norte Chico Atacama Envases|O'Higgins 780, Vallenar|+56 51 262 4411|contacto@nortechicoenvases.cl|
+Copiapó Insumos Gastronómicos|Copayapu 2300, Copiapó|+56 52 225 6600|ventas@copiapoinsumos.cl|
+#IV|Región de Coquimbo
+Comercial Elqui Packaging|Balmaceda 2450, La Serena|+56 51 229 8800|ventas@elquipackaging.cl|Hernán Ovalle (Gte. Ventas)
+Distribuidora Coquimbo Envases|Av. Videla 380, Coquimbo|+56 51 232 1150|contacto@coquimboenvases.cl|
+Ovalle Plásticos y Servicios|Benavente 520, Ovalle|+56 53 262 4000|ventas@ovalleplasticos.cl|Jorge Plaza
+La Serena Insumos Descartables|Av. Francisco de Aguirre 540, La Serena|+56 51 221 7733|contacto@laserena-insumos.cl|
+Distribuidora Elqui Mar|Barrio Industrial Mz 3, Coquimbo|+56 51 235 9900|ventas@elquimar.cl|
+Comercial Limarí Pack|Vicuña Mackenna 340, Ovalle|+56 53 263 1188|contacto@limaripack.cl|
+Illapel Plásticos y Empaques|Constitución 420, Illapel|+56 53 252 2200|ventas@illapelplasticos.cl|
+Coquimbo Puerto Envases|Av. Costanera 1200, Coquimbo|+56 51 231 8844|contacto@coquimbopuertoenvases.cl|Lucía Valenzuela
+Distribuidora Vicuña Insumos|Gabriela Mistral 210, Vicuña|+56 51 241 1290|ventas@vicunainsumos.cl|
+Bahía Pack La Serena|Av. El Santo 1850, La Serena|+56 51 228 4400|contacto@bahiapack.cl|
+#V|Región de Valparaíso
+Distribuidora ViñaPack|Av. 1 Norte 1480, Viña del Mar|+56 32 268 9900|contacto@vinapack.cl|Roberto Araya (Gte. Com.)
+Costa Mar Packaging|Av. Errázuriz 1120, Valparaíso|+56 32 225 4400|ventas@costamarpack.cl|Soledad Riquelme (Abastec.)
+Aconcagua Envases Mayorista|Av. O'Higgins 340, San Felipe|+56 34 251 2200|contacto@aconcaguaenvases.cl|
+Quillota Plásticos y Cartones|Av. Condell 890, Quillota|+56 33 231 4455|ventas@quillotaplasticos.cl|
+Distribuidora Los Andes Pack|Av. Argentina 450, Los Andes|+56 34 242 1100|contacto@losandespack.cl|
+Marga Marga Packaging|Av. Los Carrera 2100, Quilpué|+56 32 291 3300|ventas@margamargapack.cl|Felipe Godoy
+San Antonio Envases Puerto|Av. Barros Luco 1650, San Antonio|+56 35 228 1199|contacto@sanantonioenvases.cl|
+Distribuidora San Martin Viña|Calle Valparaíso 780, Viña del Mar|+56 32 269 4422|ventas@sanmartinpack.cl|
+Plásticos Valparaíso Centro|Calle Condell 1420, Valparaíso|+56 32 221 8800|contacto@valparaisoplasticos.cl|
+Concón Gastronomía & Envases|Av. Concón Reñaca 1120, Concón|+56 32 281 4400|ventas@conconenvases.cl|
+#RM|Región Metropolitana
+DIPACK Packaging Santiago|Av. Américo Vespucio 1380, Pudahuel|+56 2 2838 7000|csaavedra@dipack.cl|Cristián Saavedra (Cuentas B2B)
+Plásticos Central Macul|Av. Marathon 2890, Macul|+56 2 2238 9000|vlagos@plasticoscentral.cl|Verónica Lagos (Compras)
+Comercializadora Insumos Santiago|Av. Ecuador 4200, Estación Central|+56 2 2776 1100|ventas@insumossantiago.cl|
+Distribuidora Maipú Pack|Av. Pajaritos 2850, Maipú|+56 2 2531 4400|contacto@maipupack.cl|Gonzalo Ruiz
+Distribuidora Provincial Buin|Av. Bernardo O'Higgins 540, Buin|+56 2 2821 3300|ventas@provincialbuin.cl|Rodrigo Tapia
+Distribuidora Melipilla Envases|Av. Vicuña Mackenna 820, Melipilla|+56 2 2832 1500|contacto@melipillaenvases.cl|
+Comercial Santiago Centro Plásticos|San Diego 1120, Santiago Centro|+56 2 2698 4400|ventas@stgoplasticos.cl|
+Distribuidora Quilicura Insumos|Av. Eduardo Frei Montalva 9200, Quilicura|+56 2 2739 1200|contacto@quilicurainsumos.cl|Loreto Tapia
+San Bernardo Envases Industriales|Av. Jorge Alessandri 14500, San Bernardo|+56 2 2859 3300|ventas@sanbernardoenvases.cl|Patricio Hinojosa
+Distribuidora La Florida Pack|Av. Vicuña Mackenna 7100, La Florida|+56 2 2281 9900|contacto@lafloridapack.cl|
+#VI|Región de O'Higgins
+Cachapoal Packaging|Av. Miguel Ramírez 1280, Rancagua|+56 72 223 4500|ventas@cachapoalpack.cl|Esteban Morales (Gte. Ventas)
+Distribuidora San Fernando Plásticos|Av. Manso de Velasco 410, San Fernando|+56 72 271 8800|contacto@sanfernandoplasticos.cl|
+Comercial Rengo Envases|Prat 340, Rengo|+56 72 251 2290|ventas@rengoenvases.cl|
+Santa Cruz Packaging Colchagua|Rafael Casanova 520, Santa Cruz|+56 72 282 1144|contacto@santacruzpack.cl|Manuel Toledo
+Distribuidora Machalí Insumos|Av. San Juan 890, Machalí|+56 72 234 8810|ventas@machaliinsumos.cl|Andrés Sanhueza
+Rancagua Plásticos Centro|Brasil 740, Rancagua|+56 72 221 3300|contacto@rancaguaplasticos.cl|
+Agro Envases San Vicente|General Velásquez 610, San Vicente|+56 72 257 1800|ventas@agroenvases.cl|
+Distribuidora Pichilemu Pack|Av. Cahuil 450, Pichilemu|+56 72 284 1020|contacto@pichilemupack.cl|
+Graneros Packaging Industrial|Av. La Compañía 210, Graneros|+56 72 247 2200|ventas@granerospack.cl|
+Comercial Colchagua Insumos|Chillán 890, San Fernando|+56 72 272 4455|contacto@colchaguainsumos.cl|
+#VII|Región del Maule
+Distribuidora Maule Pack|2 Norte 1850, Talca|+56 71 224 5500|contacto@maulepack.cl|Ricardo Alarcón (Gte. Com.)
+Plásticos Curicó|Camilo Henríquez 420, Curicó|+56 75 231 6677|ventas@plasticoscurico.cl|Lorena Benavides (Ventas)
+Linares Envases y Plásticos|Independencia 680, Linares|+56 73 221 4400|contacto@linaresenvases.cl|
+Distribuidora Cauquenes Pack|Victoria 340, Cauquenes|+56 73 251 2100|ventas@cauquenespack.cl|
+Curicó Agro Packaging|Av. España 1120, Curicó|+56 75 232 8890|contacto@curicoagropack.cl|Guillermo Soler
+Talca Centro Plásticos|1 Sur 1420, Talca|+56 71 222 9911|ventas@talcacentro.cl|Javier Mardoqueo
+Distribuidora Constitución Insumos|Freire 450, Constitución|+56 71 267 1140|contacto@constitucioninsumos.cl|
+Parral Insumos Gastronómicos|Aníbal Pinto 520, Parral|+56 73 246 2200|ventas@parralinsumos.cl|
+San Javier Agro Pack|Chorrillos 310, San Javier|+56 73 232 4411|contacto@sanjavierpack.cl|
+Comercial Valle del Maule Envases|5 Oriente 1180, Talca|+56 71 223 8844|ventas@valledelmaule.cl|
+#XVI|Región de Ñuble
+Plásticos Chillán|Av. Ecuador 780, Chillán|+56 42 222 1144|contacto@plasticoschillan.cl|Daniela Orellana (Compras)
+Ñuble Insumos y Empaques|Maipún 350, Chillán|+56 42 221 9900|ventas@nubleinsumos.cl|
+Distribuidora San Carlos Pack|Vicuña Mackenna 420, San Carlos|+56 42 241 2280|contacto@sancarlospack.cl|
+Chillán Viejo Packaging|Av. O'Higgins 1850, Chillán Viejo|+56 42 225 4411|ventas@chillanviejopack.cl|
+Comercial Bulnes Insumos|Carlos Palacios 310, Bulnes|+56 42 253 1100|contacto@bulnesinsumos.cl|
+Distribuidora Yungay Plásticos|Arturo Prat 540, Yungay|+56 42 268 2233|ventas@yungayplasticos.cl|
+Quirihue Envases del Itata|Blanco Encalada 210, Quirihue|+56 42 251 1040|contacto@itatapack.cl|
+Chillán Centro Envases|5 de Abril 680, Chillán|+56 42 223 8822|ventas@chillancentro.cl|
+Agro Insumos Ñuble|Av. Collín 890, Chillán|+56 42 224 5590|contacto@agroinsumosnuble.cl|
+Comercial Termas Pack|El Roble 450, Chillán|+56 42 222 7700|ventas@termaspack.cl|
+#VIII|Región del Biobío
+BioBío Packaging|Av. Paicaví 2450, Concepción|+56 41 273 8800|ventas@biobiopack.cl|Gabriel Sepúlveda (Gte. Com.)
+Distribuidora Concepción Envases|Manuel Rodríguez 1120, Concepción|+56 41 222 3400|contacto@concepcionenvases.cl|
+Los Ángeles Plásticos B2B|Av. Las Industrias 1850, Los Ángeles|+56 43 231 4400|ventas@losangelesplasticos.cl|Mario Navarrete
+Talcahuano Puerto Pack|Av. Blanco Encalada 890, Talcahuano|+56 41 254 1122|contacto@talcahuanopack.cl|
+Distribuidora Coronel Insumos|Av. Carlos Prats 2100, Coronel|+56 41 271 3340|ventas@coronelinsumos.cl|
+San Pedro de la Paz Envases|Av. Pedro Aguirre Cerda 1450, San Pedro|+56 41 238 9900|contacto@sanpedroenvases.cl|
+Comercial Chillancito Concepción|Prat 1420, Concepción|+56 41 223 5511|ventas@chillancitopack.cl|Philippe Dubois
+Arauco Packaging Sur|Esmeralda 450, Arauco|+56 41 255 1800|contacto@araucopack.cl|
+Distribuidora Bío Bío Industrial|Camino a Penco 3100, Concepción|+56 41 246 8800|ventas@biobioindustrial.cl|
+Los Ángeles Envases Centro|Valdivia 540, Los Ángeles|+56 43 232 1199|contacto@losangelescentro.cl|
+#IX|Región de La Araucanía
+Distribuidora Frontera Pack|Rudecindo Ortega 01550, Temuco|+56 45 227 3000|contacto@fronterapackaging.cl|Alejandro Kusanovic (Gte. Gen.)
+Araucanía Empaques Mayorista|Caupolicán 1890, Temuco|+56 45 223 8811|ventas@araucaniaempaques.cl|
+Villarrica Plásticos y Envases|Av. Pedro de Valdivia 680, Villarrica|+56 45 241 3300|contacto@villarricaplasticos.cl|
+Pucón Insumos Gastronómicos|Av. Bernardo O'Higgins 890, Pucón|+56 45 244 1122|ventas@puconinsumos.cl|Carlos Cassis
+Distribuidora Angol Packaging|Ilabaca 450, Angol|+56 45 271 2280|contacto@angolpack.cl|Jorge Nieto
+Temuco Centro Envases|Aldunate 740, Temuco|+56 45 221 5544|ventas@temucocentro.cl|
+Comercial Lautaro Plásticos|Balmaceda 310, Lautaro|+56 45 253 1800|contacto@lautaroplasticos.cl|
+Distribuidora Padre Las Casas|Av. Maquehue 1200, Padre Las Casas|+56 45 233 9900|ventas@plcpack.cl|
+Victoria Packaging Malleco|Pisagua 520, Victoria|+56 45 284 1100|contacto@victoriapack.cl|
+Comercial Sur Plásticos Temuco|San Martín 1120, Temuco|+56 45 228 4411|ventas@surplasticostemuco.cl|
+#XIV|Región de Los Ríos
+Valdivia Envases y Plásticos|Av. Picarte 1650, Valdivia|+56 63 221 4000|ventas@valdiviaenvases.cl|Valeria Kunstmann
+Calle Calle Packaging|Av. España 450, Valdivia|+56 63 223 8811|contacto@callecallepack.cl|
+Distribuidora La Unión Plásticos|Comercio 520, La Unión|+56 63 232 1140|ventas@launionplasticos.cl|
+Río Bueno Insumos B2B|Pedro Lagos 340, Río Bueno|+56 63 234 2200|contacto@riobuenoinsumos.cl|
+Valdivia Centro Descartables|Chacabuco 540, Valdivia|+56 63 222 9933|ventas@valdiviacentro.cl|
+Distribuidora Panguipulli Pack|Martínez de Rozas 210, Panguipulli|+56 63 231 1050|contacto@panguipullipack.cl|
+Comercial Los Ríos Envases|Av. Ecuador 890, Valdivia|+56 63 225 4411|ventas@losriosenvases.cl|
+Paillaco Plásticos y Cartones|Vicuña Mackenna 410, Paillaco|+56 63 242 1800|contacto@paillacoplasticos.cl|
+Distribuidora Austral Valdivia|Bueras 1280, Valdivia|+56 63 228 7700|ventas@australvaldivia.cl|
+Mariquina Agro Envases|Alejo Carrillo 310, San José de la Mariquina|+56 63 245 1120|contacto@mariquinapack.cl|
+#X|Región de Los Lagos
+Austral Packaging|Av. Presidente Ibáñez 650, Puerto Montt|+56 65 228 9000|ventas@australpackaging.cl|Tomás Schwerter (Gte. Com.)
+Distribuidora Osorno Pack|Av. Portales 890, Osorno|+56 64 223 1100|contacto@osornopack.cl|Enrique Betteley
+Puerto Varas Insumos Gastronómicos|Gramado 450, Puerto Varas|+56 65 223 5500|ventas@puertovarasinsumos.cl|
+Castro Chiloé Packaging|San Martín 520, Castro|+56 65 263 2280|contacto@castropack.cl|
+Distribuidora Ancud Plásticos|Pudeto 340, Ancud|+56 65 262 1190|ventas@ancudplasticos.cl|
+Puerto Montt Centro Envases|Diego Portales 1120, Puerto Montt|+56 65 225 8811|contacto@puertomonttcentro.cl|
+Comercial Llanquihue Pack|Av. Vicente Pérez Rosales 310, Llanquihue|+56 65 224 2200|ventas@llanquihuepack.cl|
+Distribuidora Osorno Centro|Eleuterio Ramírez 740, Osorno|+56 64 221 4455|contacto@osornocentro.cl|
+Calbuco Mar Envases|Federico Errázuriz 210, Calbuco|+56 65 246 1020|ventas@calbucoenvases.cl|
+Frutillar Plásticos y Servicios|Av. Carlos Richter 540, Frutillar|+56 65 242 1890|contacto@frutillarplasticos.cl|
+#XI|Región de Aysén
+Patagonia Sur Pack|Av. Baquedano 450, Coyhaique|+56 67 223 1122|ventas@patagoniasurpack.cl|Sandra Cárcamo (Compras)
+Distribuidora Coyhaique Envases|Francisco Bilbao 890, Coyhaique|+56 67 221 4400|contacto@coyhaiqueenvases.cl|
+Puerto Aysén Packaging|Av. O'Higgins 520, Puerto Aysén|+56 67 233 2211|ventas@puertoaysenpack.cl|
+Austral Insumos Coyhaique|Prat 340, Coyhaique|+56 67 225 8890|contacto@australcoyhaique.cl|
+Comercial Carretera Austral Envases|Av. Simpson 1120, Coyhaique|+56 67 224 1155|ventas@carreteraaustralpack.cl|
+Distribuidora Chile Chico Pack|O'Higgins 210, Chile Chico|+56 67 241 1020|contacto@chilechicopack.cl|
+Coyhaique Centro Plásticos|Condell 450, Coyhaique|+56 67 222 3344|ventas@coyhaiquecentro.cl|
+Puerto Chacabuco Mar Insumos|Av. O'Higgins 110, Puerto Chacabuco|+56 67 235 1200|contacto@chacabucoinsumos.cl|
+Distribuidora Cisnes Plásticos|Gabriela Mistral 180, Puerto Cisnes|+56 67 231 1080|ventas@cisnesplasticos.cl|
+Patagonia Norte Aysén Envases|Magallanes 680, Coyhaique|+56 67 226 5500|contacto@patagonianortepack.cl|
+#XII|Región de Magallanes
+Magallanes Packaging|Av. Eduardo Frei 01240, Punta Arenas|+56 61 224 8800|contacto@magallanespack.cl|Francisco Mimica (Gte. Com.)
+Austral Insumos Punta Arenas|Calle Errázuriz 780, Punta Arenas|+56 61 222 5500|ventas@australinsumos.cl|
+Distribuidora Puerto Natales Pack|Av. Santiago Bueras 890, Puerto Natales|+56 61 241 2200|contacto@natalespack.cl|
+Punta Arenas Plásticos Centro|Bories 540, Punta Arenas|+56 61 221 8844|ventas@puntaarenasplasticos.cl|Juan Pablo Vladilo
+Frigorífico & Envases Magallanes|Km 7.5 Norte, Punta Arenas|+56 61 221 1000|compras@simunovic.cl|Esteban Simunovic
+Comercial Estrecho de Magallanes|Av. España 1450, Punta Arenas|+56 61 223 9911|contacto@estrechopack.cl|
+Tierra del Fuego Insumos|Padre Fagnano 310, Porvenir|+56 61 258 1020|ventas@tierradelfuegopack.cl|
+Distribuidora Patagonia Austral Pack|Lautaro Navarro 890, Punta Arenas|+56 61 225 4400|contacto@patagoniaaustralpack.cl|
+Puerto Natales Centro Envases|Blanco Encalada 420, Puerto Natales|+56 61 242 1180|ventas@natalescentro.cl|
+Magallanes Insumos Industriales|Zona Franca Manzana 12, Punta Arenas|+56 61 221 3300|contacto@magallanesindustrial.cl|`;
+function buildSeed(){const out=[];let cod='',reg='',mode='';
+  SEED_RAW.split('\n').forEach(l=>{l=l.replace(/\r$/,'');if(!l.trim())return;
+    if(l==='@F'){mode='F';return}
+    if(l[0]==='#'){mode='D';const a=l.slice(1).split('|');cod=a[0];reg=a[1]+' ('+a[0]+')';return}
+    const a=l.split('|');
+    if(mode==='F')out.push(norm({id:'F:'+a[0],fuente:'Base Jpack',tipo:'Fábrica',nombre:a[0],region:a[1],direccion:a[2],telefono:a[3],correo:a[4],contacto:a[5],detalle:a[6]}));
+    else out.push(norm({id:'D:'+a[0]+cod,fuente:'Base Jpack',tipo:'Distribuidor',nombre:a[0],region:reg,direccion:a[1],telefono:a[2],correo:a[3],contacto:a[4]}))});
+  return out}
+function loadBase(auto){
+  const have=new Set(rows.map(r=>r.id)),miss=buildSeed().filter(r=>!have.has(r.id)&&!queue[r.id]);
+  if(!miss.length){toast('La base completa ya está en la Sheet');return}
+  if(!auto&&!confirm('Se cargarán '+miss.length+' prospectos de la base que faltan en la Sheet (los que eliminaste no vuelven). ¿Continuar?'))return;
+  miss.forEach(r=>queue[r.id]=r);sv(K.queue,queue);rows=rows.concat(miss);sv(K.cache,rows);render();statusOk();push();toast('Enviando '+miss.length+' prospectos a la Sheet…')}
+const REG=[['Arica y Parinacota','arica'],['Tarapacá','tarapaca'],['Antofagasta','antofagasta'],['Atacama','atacama'],['Coquimbo','coquimbo'],['Valparaíso','valparaiso'],['Metropolitana','metropolitana','(rm)','santiago'],["O'Higgins",'higgins'],['Maule','maule'],['Ñuble','nuble'],['Biobío','biobio'],['La Araucanía','araucania'],['Los Ríos','los rios'],['Los Lagos','los lagos'],['Aysén','aysen'],['Magallanes','magallanes']];
+const regOf=p=>{const s=na(p.region);const r=REG.find(x=>x.slice(1).some(k=>s.includes(k)));return r?r[0]:'Sin región'};comunaOf=p=>{const s=(p.region||'').trim();const m=s.match(/^([^(\n]+?)\s*\(/);if(m)return m[1].trim();const parts=s.split(/[,\-–]/);return (parts[0]||s).trim()||'Sin comuna'};
+const MSG=encodeURIComponent('Hola, le escribo de Jpack (envases PP/PE). Quería conversar sobre sus necesidades de envases.'),MAILSUB=encodeURIComponent('Jpack · Envases PP/PE');
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+try{const m=location.hash.match(/^#cfg=(.+)$/);if(m){const c=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));if(c&&c.url&&c.sheetUrl)localStorage.setItem('jpack3_cfg',JSON.stringify({sheetUrl:c.sheetUrl,url:c.url}));history.replaceState(null,'',location.pathname)}}catch(e){}
+let cfg=ld(K.cfg,{sheetUrl:'',url:''}),rows=ld(K.cache,[]),queue=ld(K.queue,{}),tab='todos',busy=false,editId=null,dupResolved=ld(K.dups,{}),routeStops=ld(K.route,[]),routeDate=today();
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const na=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function nd(s){s=String(s||'').trim();let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[0];m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/);return m?m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'):''}
+function norm(r){const o={};F.forEach(f=>o[f]=String(r[f]??'').trim());o.estado=ST.includes(o.estado)?o.estado:'nuevo';o.fecha=nd(o.fecha);return o}
+const same=(a,b)=>F.every(f=>{if(f==='fuente')return true;const x=String(a[f]||'').trim(),y=String(b[f]||'').trim();return f==='telefono'?x.replace(/\D/g,'')===y.replace(/\D/g,''):x===y});
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2800)}
+function status(ok,m){if(!ok&&/conectar con el conector/.test(m))m+=' · revisa que la URL termine en /exec y el acceso sea "Cualquier persona"';const e=$('st');e.className=ok?'ok':'bad';e.textContent='☁️ '+m}
+function statusOk(){const p=pendN();status(!p,'Conectado · '+rows.length+' registros'+(p?' · '+p+' pendiente(s) de enviar':''))}
+
+/* ---------- Dashboard ---------- */
+let view='pros',recs=ld(K.recs,[]),mets=ld(K.mets,[]),qR=ld(K.qR,{}),qM=ld(K.qM,{}),dashOK=true,dsel={v:'',p:today().slice(0,7)},editRec=null,editMet=null;
+const slug=s=>na(s).replace(/[^a-z0-9]/g,'');
+const np=s=>{s=String(s||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})/);if(m)return m[1]+'-'+m[2].padStart(2,'0');m=s.match(/^(\d{1,2})[\/.-](\d{4})$/);return m?m[2]+'-'+m[1].padStart(2,'0'):''};
+const num=v=>{const t=String(v??'').trim();if(/^-?\d+[.,]\d{1,2}$/.test(t))return Math.round(parseFloat(t.replace(',','.')));const s=t.replace(/[^\d-]/g,'');return s===''||s==='-'?'':Number(s)};
+function nrec(r){const o={fecha:nd(r.fecha),vendedor:String(r.vendedor||'').trim(),visitados:num(r.visitados),ventaTotal:num(r.ventaTotal),facturado:num(r.facturado),devolucion:num(r.devolucion),compra:num(r.compra),nuevos:num(r.nuevos),obs:String(r.obs||'').trim()};o.id='R:'+o.fecha+'|'+slug(o.vendedor);return o}
+function nmet(r){const o={periodo:np(r.periodo),vendedor:String(r.vendedor||'').trim(),meta:num(r.meta),dias:num(r.dias)};o.id='M:'+o.periodo+'|'+slug(o.vendedor);return o}
+const okR=r=>r.fecha&&r.vendedor,okM=r=>r.periodo&&r.vendedor;
+const sameO=(a,b,ks)=>ks.every(k=>String(a[k]??'')===String(b[k]??''));
+const KRs=['fecha','vendedor','visitados','ventaTotal','facturado','devolucion','compra','nuevos','obs'],KMs=['periodo','vendedor','meta','dias'];
+const pendN=()=>Object.keys(queue).length+Object.keys(qR).length+Object.keys(qM).length;
+const fM=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n||0);
+const fP=n=>(isFinite(n)?n.toFixed(1):'0.0')+'%';
+const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+/* Feriados nacionales de Chile 2026-2027 (verifícalos con el calendario oficial). Si un mes tiene otro feriado, usa «Días hábiles» en la meta. */
+const HOL=new Set(['2026-01-01','2026-04-03','2026-04-04','2026-05-01','2026-05-21','2026-06-21','2026-06-29','2026-07-16','2026-08-15','2026-09-18','2026-09-19','2026-10-12','2026-10-31','2026-11-01','2026-12-08','2026-12-25','2027-01-01','2027-03-26','2027-03-27','2027-05-01','2027-05-21','2027-06-21','2027-06-28','2027-07-16','2027-08-15','2027-09-18','2027-09-19','2027-10-11','2027-10-31','2027-11-01','2027-12-08','2027-12-25']);
+const wd=(a,b)=>{let c=0;for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1)){const w=d.getDay();if(w>0&&w<6&&!HOL.has(isoD(d)))c++}return c};
+const pb=p=>{const [y,m]=p.split('-').map(Number);return [new Date(y,m-1,1),new Date(y,m,0)]};
+const diasT=(p,mt)=>(mt&&Number(mt.dias)>0)?Number(mt.dias):wd(...pb(p));
+function diasE(p,mt){const [s,e]=pb(p),t=new Date();t.setHours(0,0,0,0);if(t<s)return 0;return Math.min(wd(s,t<e?t:e),diasT(p,mt))}
+/* Mismas fórmulas del panel comercial: neta = facturado − devoluciones; forecast = neta ÷ días transcurridos × días del mes */
+function dashRows(){
+  const M={},blank=(v,p)=>({vendedor:v,periodo:p,visit:0,venta:0,fact:0,dev:0,compra:0,nuevos:0});
+  recs.forEach(r=>{const p=r.fecha.slice(0,7),k=slug(r.vendedor)+'|'+p,a=M[k]||(M[k]=blank(r.vendedor,p));
+    const v=Number(r.ventaTotal)||0,f=r.facturado===''?v:Number(r.facturado)||0;
+    a.visit+=Number(r.visitados)||0;a.venta+=v;a.fact+=f;a.dev+=Number(r.devolucion)||0;a.compra+=Number(r.compra)||0;a.nuevos+=Number(r.nuevos)||0});
+  mets.forEach(m=>{const k=slug(m.vendedor)+'|'+m.periodo;if(!M[k])M[k]=blank(m.vendedor,m.periodo)});
+  return Object.values(M).map(a=>{
+    const mt=mets.find(m=>m.periodo===a.periodo&&slug(m.vendedor)===slug(a.vendedor)),meta=mt?Number(mt.meta)||0:0,tot=diasT(a.periodo,mt),el=diasE(a.periodo,mt),neta=Math.max(a.fact-a.dev,0);
+    return Object.assign(a,{meta,neta,quiebre:Math.max(a.venta-a.fact,0),forecast:el>0?neta/el*tot:0})})}
+const pgc=b=>b>=100?'var(--ac)':b>=70?'var(--bl)':b>=40?'var(--yl)':'var(--rd)';
+const kp=(l,v,s,b)=>`<div class="kpi"><b>${v}</b><span>${l}</span>${b!=null?`<div class="pg"><i style="width:${Math.max(0,Math.min(b,100))}%;background:${pgc(b)}"></i></div>`:''}${s?`<span>${s}</span>`:''}</div>`;
+const RF=[['vendedor','Vendedor *','text'],['fecha','Fecha *','date'],['visitados','Clientes visitados','number'],['ventaTotal','Venta total sin IVA ($)','number'],['facturado','Facturado sin IVA ($) · vacío = igual a la venta total','number'],['devolucion','Devoluciones / rechazos ($)','number'],['compra','Clientes con compra efectiva','number'],['nuevos','Clientes nuevos captados','number'],['obs','Observaciones','area']];
+const MF=[['periodo','Mes *','month'],['vendedor','Vendedor *','text'],['meta','Meta de venta ($) *','number'],['dias','Días hábiles del mes (opcional, si hay feriados)','number']];
+function buildForm(p,fs,el){el.innerHTML=fs.map(([k,l,t])=>`<div class="f"><label>${l}</label>${t==='area'?`<textarea id="${p}_${k}" rows="2"></textarea>`:`<input id="${p}_${k}" type="${t}"${t==='number'?' inputmode="numeric"':''}${k==='vendedor'?' list="vl" autocomplete="off"':''}>`}</div>`).join('')}
+function readForm(p,fs){const o={};fs.forEach(([k])=>o[k]=$(p+'_'+k).value);return o}
+const lastV=()=>(recs.find(r=>!dsel.v||slug(r.vendedor)===dsel.v)||recs[0]||mets[0]||{}).vendedor||'Equipo Jpack';
+const stress={};
+const stressCell=(m,d,t)=>{const v=m.meta/d,df=Math.round(v-m.meta/t);return d===t?'<span class="meta">sin estrés</span>':'<b>'+fM(Math.round(v))+'</b> <span class="meta">('+(df>0?'+':'−')+fM(Math.abs(df))+' por día)</span>'};
+function renderDash(){
+  const cur=today().slice(0,7),names={};
+  recs.concat(mets).forEach(x=>{if(x.vendedor)names[slug(x.vendedor)]=x.vendedor});
+  const per=[...new Set([cur].concat(recs.map(r=>r.fecha.slice(0,7)),mets.map(m=>m.periodo)))].filter(Boolean).sort().reverse();
+  if(dsel.p!=='*'&&!per.includes(dsel.p))dsel.p=cur;
+  $('dV').innerHTML='<option value="">Todos los vendedores</option>'+Object.keys(names).sort().map(k=>`<option value="${k}">${esc(names[k])}</option>`).join('');
+  $('dV').value=dsel.v;
+  $('dP').innerHTML='<option value="*">Todos los meses</option>'+per.map(p=>`<option value="${p}">${p}</option>`).join('');
+  $('dP').value=dsel.p;
+  $('vl').innerHTML=Object.values(names).map(n=>`<option value="${esc(n)}">`).join('');
+  $('dWarn').innerHTML=!cfg.url?'<div class="warn">Conecta la Google Sheet con el botón ☁️ para guardar y sincronizar.</div>':!dashOK?'<div class="warn">La Sheet aún no tiene el Apps Script JPACK actualizado. Pega el script nuevo y vuelve a implementar con «Nueva versión».</div>':'';
+  const inV=x=>!dsel.v||slug(x.vendedor)===dsel.v,inP=p=>dsel.p==='*'||p===dsel.p;
+  const rs=dashRows().filter(r=>inV(r)&&inP(r.periodo));
+  const t={meta:0,venta:0,fact:0,dev:0,neta:0,quiebre:0,forecast:0,visit:0,compra:0,nuevos:0};
+  rs.forEach(r=>Object.keys(t).forEach(k=>t[k]+=r[k]));
+  const cr=t.meta>0?t.neta/t.meta*100:0,cp=t.meta>0?t.forecast/t.meta*100:0,ef=t.visit>0?t.compra/t.visit*100:0;
+  $('dK').innerHTML=kp('Meta venta ($)',fM(t.meta))+kp('Forecast cierre ($)',fM(t.forecast),'Al ritmo actual del mes')+kp('% Cumplimiento real',fP(cr),'Venta neta '+fM(t.neta),cr)+kp('% Cumplimiento proyectado',fP(cp),'Llegarías a '+fM(t.forecast))+kp('Venta total (sin IVA)',fM(t.venta),'Antes de devoluciones')+kp('Quiebre de stock ($)',fM(t.quiebre),'Venta total − facturado')+kp('Venta facturada (sin IVA)',fM(t.fact))+kp('Devolución / rechazo',fM(t.dev))+kp('Venta neta efectiva',fM(t.neta),'Facturado − devoluciones')+kp('Clientes visitados',t.visit)+kp('Clientes compra efectiva',t.compra)+kp('% Efectividad',fP(ef),'Compra ÷ visitados')+kp('Clientes nuevos',t.nuevos);
+  const c=s=>rows.filter(p=>p.estado===s).length;
+  $('dF').innerHTML=kp('Prospectos',rows.length)+kp('Contactados',c('contactado'))+kp('Interesados',c('interesado'))+kp('Clientes',c('cliente'))+kp('Descartados',c('descartado'));
+  // Meta semanal
+  let wg={contactos:40,interes:10};try{wg=Object.assign(wg,JSON.parse(localStorage.getItem(K.wgoal)||'{}'))}catch(e){}
+  if($('wgContactos')){$('wgContactos').value=wg.contactos;$('wgInteres').value=wg.interes}
+  const weekStart=(()=>{const d=new Date();const day=d.getDay()||7;d.setDate(d.getDate()-day+1);return d.toISOString().slice(0,10)})();
+  const weekRows=rows.filter(p=>p.estado==='contactado'||p.estado==='interesado'||p.estado==='cliente');
+  // approximate weekly: those with notas containing dates this week or updated - use contactados count as proxy
+  const nContact=rows.filter(p=>p.estado==='contactado'||p.estado==='interesado'||p.estado==='cliente').length;
+  const nInter=c('interesado')+c('cliente');
+  const pctC=wg.contactos?Math.min(100,Math.round(nContact/wg.contactos*100)):0;
+  const pctI=wg.interes?Math.min(100,Math.round(nInter/wg.interes*100)):0;
+  if($('dW'))$('dW').innerHTML=kp('Contactos (acum.)',nContact+' / '+wg.contactos)+kp('Avance contactos',pctC+'%')+kp('Interesados+clientes',nInter+' / '+wg.interes)+kp('Avance interesados',pctI+'%');
+  // Embudo por región
+  const byR={};
+  rows.forEach(p=>{const r=regOf(p);if(!byR[r])byR[r]={t:0,c:0,i:0,cl:0};byR[r].t++;if(p.estado==='contactado')byR[r].c++;if(p.estado==='interesado')byR[r].i++;if(p.estado==='cliente')byR[r].cl++});
+  const rKeys=Object.keys(byR).sort((a,b)=>byR[b].t-byR[a].t);
+  if($('dFR'))$('dFR').innerHTML='<table><thead><tr><th>Región</th><th>Total</th><th>Contactados</th><th>Interesados</th><th>Clientes</th></tr></thead><tbody>'+rKeys.map(r=>`<tr><td>${esc(r)}</td><td>${byR[r].t}</td><td>${byR[r].c}</td><td>${byR[r].i}</td><td>${byR[r].cl}</td></tr>`).join('')+'</tbody></table>';
+  renderSemTrend();
+  const rr=recs.filter(r=>inV(r)&&inP(r.fecha.slice(0,7))).sort((a,b)=>a.fecha<b.fecha?1:-1);
+  $('dR').innerHTML=rr.length?`<table><thead><tr><th>Fecha</th><th>Vendedor</th><th>Visit.</th><th>Venta</th><th>Facturado</th><th>Devol.</th><th>Compra</th><th>Nuevos</th><th></th></tr></thead><tbody>${rr.map(r=>`<tr><td>${esc(r.fecha)}${qR[r.id]?' ⏳':''}</td><td>${esc(r.vendedor)}</td><td>${r.visitados}</td><td>${fM(r.ventaTotal)}</td><td>${r.facturado===''?'—':fM(r.facturado)}</td><td>${fM(r.devolucion)}</td><td>${r.compra}</td><td>${r.nuevos}</td><td><button class="btn" data-er="${esc(r.id)}">✏️</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Sin registros en este período. Usa «＋ Registro diario».</div>';
+  const mm=mets.filter(m=>inV(m)&&inP(m.periodo)).sort((a,b)=>a.periodo<b.periodo?1:-1);
+  $('dM').innerHTML=mm.length?`<table><thead><tr><th>Mes</th><th>Vendedor</th><th>Meta</th><th>Días hábiles</th><th>Venta diaria necesaria</th><th>Estresar días</th><th>Venta diaria estresada</th><th></th></tr></thead><tbody>${mm.map(m=>{const t=diasT(m.periodo,m),d=stress[m.id]||t;return `<tr><td>${esc(m.periodo)}${qM[m.id]?' ⏳':''}</td><td>${esc(m.vendedor)}</td><td>${fM(m.meta)}</td><td>${m.dias===''?'auto ('+t+')':m.dias}</td><td><b>${fM(Math.round(m.meta/t))}</b></td><td><input type="number" inputmode="numeric" min="1" step="1" class="stin" data-st="${esc(m.id)}" data-t="${t}" value="${d}"></td><td data-sv>${stressCell(m,d,t)}</td><td><button class="btn" data-em="${esc(m.id)}" title="Editar meta">✏️</button> <button class="btn d" data-dm="${esc(m.id)}" title="Eliminar meta">🗑️</button></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">Sin meta en este período. Usa «🎯 Meta del mes».</div>';
+}
+function openRec(id){
+  const r=id?recs.find(x=>x.id===id):null;editRec=r?r.id:null;
+  RF.forEach(([k])=>$('r_'+k).value=r?r[k]:(k==='fecha'?today():k==='vendedor'?lastV():''));
+  $('r_vendedor').disabled=$('r_fecha').disabled=!!r;$('rDel').style.display=r?'':'none';$('rT').textContent=r?'Editar registro':'＋ Registro diario';$('mRec').classList.add('on')}
+function saveRec(){
+  const o=nrec(readForm('r',RF));if(!okR(o)){toast('Falta el vendedor o la fecha');return}
+  qR[o.id]=o;sv(K.qR,qR);const i=recs.findIndex(x=>x.id===o.id);i>=0?recs[i]=o:recs.unshift(o);sv(K.recs,recs);
+  $('mRec').classList.remove('on');render();statusOk();toast('Guardado');push()}
+function delRec(){
+  const r=recs.find(x=>x.id===editRec);if(!r)return;
+  if(!confirm('¿Eliminar el registro de '+r.vendedor+' del '+r.fecha+'?\n\nSe borra también de la Google Sheet.'))return;
+  jsonp('delX',{t:'reg',a:r.fecha,b:r.vendedor},d=>{if(d&&d.ok){recs=recs.filter(x=>x.id!==r.id);delete qR[r.id];sv(K.recs,recs);sv(K.qR,qR);$('mRec').classList.remove('on');render();statusOk();toast('Eliminado')}else toast((d&&d.error)||'No se pudo eliminar. ¿Actualizaste el Apps Script corregido?')})}
+function openMet(id){
+  const m=id?mets.find(x=>x.id===id):null;editMet=m?m.id:null;
+  MF.forEach(([k])=>$('m_'+k).value=m?m[k]:(k==='periodo'?(dsel.p!=='*'?dsel.p:today().slice(0,7)):k==='vendedor'?lastV():''));
+  $('m_vendedor').disabled=$('m_periodo').disabled=!!m;$('mDel').style.display=m?'':'none';$('mT').textContent=m?'Editar meta':'🎯 Meta del mes';$('mMet').classList.add('on')}
+function saveMet(){
+  const o=nmet(readForm('m',MF));if(!okM(o)||!(o.meta>0)){toast('Falta el mes, el vendedor o la meta');return}
+  qM[o.id]=o;sv(K.qM,qM);const i=mets.findIndex(x=>x.id===o.id);i>=0?mets[i]=o:mets.unshift(o);sv(K.mets,mets);
+  $('mMet').classList.remove('on');render();statusOk();toast('Guardado');push()}
+function delMet(){
+  const m=mets.find(x=>x.id===editMet);if(!m)return;
+  if(!confirm('¿Eliminar la meta de '+m.vendedor+' ('+m.periodo+')?\n\nSe borra también de la Google Sheet.'))return;
+  jsonp('delX',{t:'met',a:m.periodo,b:m.vendedor},d=>{if(d&&d.ok){mets=mets.filter(x=>x.id!==m.id);delete qM[m.id];sv(K.mets,mets);sv(K.qM,qM);$('mMet').classList.remove('on');render();statusOk();toast('Eliminada')}else toast((d&&d.error)||'No se pudo eliminar. ¿Actualizaste el Apps Script corregido?')})}
+
+
+/* ---------- Semáforo, tendencia, informe y CSV ---------- */
+const semOf=(pr,meta)=>!meta?'n':pr>=100?'g':pr>=85?'y':'r',SCj={g:'var(--ac)',y:'var(--yl)',r:'var(--rd)',n:'var(--dim)'},SLj={g:'En línea',y:'En riesgo',r:'Bajo la meta',n:'Sin meta'};
+const periodSel=()=>dsel.p==='*'?today().slice(0,7):dsel.p;
+function semData(){const p=periodSel();return dashRows().filter(r=>r.periodo===p&&(!dsel.v||slug(r.vendedor)===dsel.v)).map(r=>{const pr=r.meta?r.forecast/r.meta*100:0;return{...r,pr,cum:r.meta?r.neta/r.meta*100:0,ef:r.visit?r.compra/r.visit*100:0,sem:semOf(pr,r.meta)}}).sort((a,b)=>b.pr-a.pr)}
+const hbj=(l,a,max,col,t)=>`<div class="hb"><span title="${esc(l)}">${esc(l)}</span><div class="tr"><i style="width:${max?Math.max(0,Math.min(a/max*100,100)):0}%;background:${col}"></i></div><b>${t}</b></div>`;
+function trendRows(){const ps=[];let p=periodSel();for(let i=0;i<6;i++){ps.unshift(p);const [y,m]=p.split('-').map(Number);p=isoD(new Date(y,m-2,1)).slice(0,7)}
+  const all=dashRows().filter(r=>!dsel.v||slug(r.vendedor)===dsel.v);return ps.map(q=>{const A=all.filter(r=>r.periodo===q);return{q,meta:A.reduce((a,r)=>a+r.meta,0),neta:A.reduce((a,r)=>a+r.neta,0)}})}
+function renderSemTrend(){
+  const S=semData();
+  $('dS').innerHTML=S.length?`<table><thead><tr><th>Vendedor</th><th>Meta</th><th>Venta neta</th><th>Cumpl.</th><th>Proyección</th><th>Efectividad</th></tr></thead><tbody>${S.map(r=>`<tr><td><span class="sdot" style="background:${SCj[r.sem]}"></span>${esc(r.vendedor)}</td><td>${fM(r.meta)}</td><td>${fM(r.neta)}</td><td>${r.meta?fP(r.cum):'—'}</td><td><b style="color:${SCj[r.sem]}">${r.meta?fP(r.pr):SLj.n}</b></td><td>${fP(r.ef)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">Sin datos en '+periodSel()+'.</div>';
+  const T=trendRows(),mx=Math.max(...T.map(x=>Math.max(x.meta,x.neta)),1);
+  $('dT').innerHTML=T.map(x=>hbj(x.q+' · meta',x.meta,mx,'var(--dim)',fM(x.meta))+hbj('venta neta',x.neta,mx,x.meta&&x.neta>=x.meta?'var(--ac)':'var(--bl)',fM(x.neta)+(x.meta?' ('+fP(x.neta/x.meta*100)+')':''))).join('<div style="height:6px"></div>')}
+function repData(){const p=periodSel(),rs=dashRows().filter(r=>r.periodo===p&&(!dsel.v||slug(r.vendedor)===dsel.v)),t={meta:0,venta:0,fact:0,dev:0,neta:0,quiebre:0,forecast:0,visit:0,compra:0,nuevos:0};
+  rs.forEach(r=>Object.keys(t).forEach(k=>t[k]+=r[k]));const cr=t.meta?t.neta/t.meta*100:0,cp=t.meta?t.forecast/t.meta*100:0,ef=t.visit?t.compra/t.visit*100:0;
+  return{p,t,cr,cp,ef,v:dsel.v&&rs[0]?rs[0].vendedor:'Todos los vendedores',sem:semData(),tr:trendRows(),
+    kk:[['Meta venta',fM(t.meta)],['Forecast cierre',fM(t.forecast)],['% Cumplimiento real',fP(cr)],['% Cumpl. proyectado',fP(cp)],['Venta total (sin IVA)',fM(t.venta)],['Quiebre de stock',fM(t.quiebre)],['Venta facturada',fM(t.fact)],['Devolución / rechazo',fM(t.dev)],['Venta neta efectiva',fM(t.neta)],['Clientes visitados',t.visit],['Compra efectiva',t.compra],['% Efectividad',fP(ef)]]}}
+function repText(d){return '*Informe de ventas Jpack · '+d.p+'*\n'+d.v+'\n\nMeta: '+fM(d.t.meta)+'\nVenta neta efectiva: '+fM(d.t.neta)+' ('+fP(d.cr)+')\nForecast de cierre: '+fM(d.t.forecast)+' ('+fP(d.cp)+')\nQuiebre de stock: '+fM(d.t.quiebre)+'\nDevoluciones: '+fM(d.t.dev)+'\nVisitados: '+d.t.visit+' · Compra efectiva: '+d.t.compra+' · Efectividad: '+fP(d.ef)+'\n\nSemáforo:\n'+(d.sem.length?d.sem.map(s=>({g:'🟢',y:'🟡',r:'🔴',n:'⚪'}[s.sem])+' '+s.vendedor+' — '+(s.meta?'proyecta '+fP(s.pr):'sin meta')).join('\n'):'Sin datos')}
+let repTxt='';
+function openRep(){const d=repData(),mx=Math.max(d.t.meta,d.t.neta,d.t.forecast,1);repTxt=repText(d);
+  $('repBody').innerHTML=`<h2>📄 Informe de ventas</h2><div style="font-size:12.5px;color:var(--dim)">${esc(d.p)} · ${esc(d.v)}</div><div class="kpis" style="margin-top:10px">${d.kk.map(k=>kp(k[0],k[1])).join('')}</div><h3>Meta vs venta</h3>${hbj('Meta',d.t.meta,mx,'var(--dim)',fM(d.t.meta))+hbj('Venta neta',d.t.neta,mx,'var(--ac)',fM(d.t.neta))+hbj('Forecast',d.t.forecast,mx,'var(--bl)',fM(d.t.forecast))}<h3>Semáforo por vendedor</h3>${d.sem.length?d.sem.map(s=>`<div style="margin:4px 0"><span class="sdot" style="background:${SCj[s.sem]}"></span>${esc(s.vendedor)} — <b>${s.meta?'proyecta '+fP(s.pr):'sin meta'}</b> · neta ${fM(s.neta)}</div>`).join(''):'<div style="color:var(--dim)">Sin datos.</div>'}<h3>Últimos 6 meses</h3>${d.tr.map(x=>hbj(x.q,x.neta,Math.max(...d.tr.map(y=>Math.max(y.meta,y.neta)),1),x.meta&&x.neta>=x.meta?'var(--ac)':'var(--bl)',fM(x.neta)+(x.meta?' / '+fM(x.meta):''))).join('')}`;
+  $('rWa').href='https://wa.me/?text='+encodeURIComponent(repTxt);$('mRep').classList.add('on')}
+function repJPG(){const d=repData(),W=900,cols=4,cw=(W-80)/cols,kr=Math.ceil(d.kk.length/cols),H=125+kr*76+20+100+24+Math.max(d.sem.length,1)*30+50,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,W,H);x.fillStyle='#0F6E56';x.fillRect(0,0,W,70);x.fillStyle='#fff';x.font='bold 28px Arial';x.fillText('Informe de ventas · Jpack',40,45);
+  x.fillStyle='#1B1F1D';x.font='16px Arial';x.fillText(d.p+' · '+d.v,40,100);let y=125;
+  d.kk.forEach((k,i)=>{const cx=40+(i%cols)*cw,cy=y+Math.floor(i/cols)*76;x.strokeStyle='#DEDBD2';x.strokeRect(cx,cy,cw-10,66);x.fillStyle='#626A66';x.font='12px Arial';x.fillText(k[0],cx+10,cy+22);x.fillStyle='#1B1F1D';x.font='bold 19px Arial';x.fillText(String(k[1]),cx+10,cy+52)});
+  y+=kr*76+20;const mx=Math.max(d.t.meta,d.t.neta,d.t.forecast,1),bw=W-80-230;
+  [['Meta',d.t.meta,'#9AA39E'],['Venta neta',d.t.neta,'#0F6E56'],['Forecast',d.t.forecast,'#2F6FDB']].forEach((b,i)=>{const by=y+i*28;x.fillStyle='#1B1F1D';x.font='14px Arial';x.fillText(b[0],40,by+16);x.fillStyle='#EEE';x.fillRect(150,by+2,bw,18);x.fillStyle=b[2];x.fillRect(150,by+2,bw*Math.min(b[1]/mx,1),18);x.fillStyle='#1B1F1D';x.fillText(fM(b[1]),150+bw+10,by+16)});
+  y+=100;x.font='bold 16px Arial';x.fillStyle='#1B1F1D';x.fillText('Semáforo por vendedor',40,y);y+=26;const col={g:'#168A4A',y:'#C98A00',r:'#C0392B',n:'#9AA39E'};
+  if(!d.sem.length){x.font='14px Arial';x.fillText('Sin datos en este período.',40,y)}
+  d.sem.forEach(s=>{x.fillStyle=col[s.sem];x.beginPath();x.arc(52,y-5,7,0,7);x.fill();x.fillStyle='#1B1F1D';x.font='14px Arial';x.fillText(s.vendedor+' — '+(s.meta?'proyecta '+fP(s.pr):'sin meta')+' · neta '+fM(s.neta),68,y);y+=30});
+  cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='informe-jpack-'+d.p+'.jpg';a.click()},'image/jpeg',.92)}
+/* CSV: separador «;» (se abre bien en Excel de Chile) */
+const csvEsc=v=>{v=String(v??'');return /[";\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+function dlCSV(name,arr){const b=new Blob(['\ufeff'+arr.map(r=>r.map(csvEsc).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
+function parseCSV(t){t=t.replace(/^\ufeff/,'');const first=t.split(/\r?\n/)[0]||'',sep=(first.match(/;/g)||[]).length>=(first.match(/,/g)||[]).length?';':',',out=[];let row=[],f='',q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===sep){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);f='';if(row.some(x=>x!==''))out.push(row);row=[]}else f+=c}
+  if(f!==''||row.length){row.push(f);if(row.some(x=>x!==''))out.push(row)}return out}
+const colIx=(h,names)=>h.findIndex(x=>names.includes(x));
+function importPros(txt){const t=parseCSV(txt);if(t.length<2)return'❌ El archivo está vacío.';const h=t[0].map(x=>na(x).trim()),ix=n=>colIx(h,n),
+  I={id:ix(['id']),emp:ix(['empresa','nombre']),tipo:ix(['tipo']),reg:ix(['region / comuna','region','comuna']),dir:ix(['direccion']),con:ix(['contacto']),tel:ix(['telefono']),cor:ix(['correo']),det:ix(['detalle / oportunidad','detalle']),est:ix(['estado']),fec:ix(['proximo seguimiento','fecha']),not:ix(['notas'])};
+  if(I.id<0)return'❌ No encuentro la columna «ID». Usa el CSV exportado de la Sheet, con sus encabezados.';
+  const g=(r,i)=>i<0?'':String(r[i]??'').trim();let upd=0,add=0,same_=0,skip=0;
+  t.slice(1).forEach(r=>{const id=g(r,I.id);if(!id){skip++;return}const old=rows.find(x=>x.id===id);
+    if(old){const o={...old},e=na(g(r,I.est));if(ST.includes(e))o.estado=e;if(g(r,I.fec))o.fecha=nd(g(r,I.fec));if(g(r,I.not))o.notas=g(r,I.not);
+      if(['estado','fecha','notas'].some(k=>o[k]!==old[k])){queue[id]=o;rows[rows.indexOf(old)]=o;upd++}else same_++}
+    else if(g(r,I.emp)){const o=norm({id,fuente:'Importado',tipo:g(r,I.tipo)||'Prospecto manual',nombre:g(r,I.emp),region:g(r,I.reg),direccion:g(r,I.dir),contacto:g(r,I.con),telefono:g(r,I.tel),correo:g(r,I.cor),detalle:g(r,I.det),estado:na(g(r,I.est)),fecha:g(r,I.fec),notas:g(r,I.not)});queue[id]=o;rows.unshift(o);add++}else skip++});
+  sv(K.queue,queue);sv(K.cache,rows);render();statusOk();push();
+  return'✅ Importación lista: '+upd+' prospecto(s) actualizados con su estado, fecha o notas, '+add+' agregados, '+same_+' sin cambios'+(skip?', '+skip+' filas omitidas':'')+'.'}
+function importReg(txt){const t=parseCSV(txt);if(t.length<2)return'❌ El archivo está vacío.';const h=t[0].map(x=>na(x).trim()),ix=n=>colIx(h,n),
+  I={f:ix(['fecha']),v:ix(['vendedor']),vi:ix(['visitados','clientes visitados']),vt:ix(['venta total sin iva','venta total']),fa:ix(['facturado sin iva','facturado']),de:ix(['devoluciones','devolucion']),co:ix(['clientes con compra','compra efectiva']),nu:ix(['clientes nuevos','nuevos']),ob:ix(['observaciones'])};
+  if(I.f<0||I.v<0)return'❌ Faltan las columnas «Fecha» y «Vendedor».';
+  const g=(r,i)=>i<0?'':String(r[i]??'').trim();let n=0,skip=0;
+  t.slice(1).forEach(r=>{const o=nrec({fecha:g(r,I.f),vendedor:g(r,I.v),visitados:g(r,I.vi),ventaTotal:g(r,I.vt),facturado:g(r,I.fa),devolucion:g(r,I.de),compra:g(r,I.co),nuevos:g(r,I.nu),obs:g(r,I.ob)});
+    if(!okR(o)){skip++;return}qR[o.id]=o;const i=recs.findIndex(x=>x.id===o.id);i>=0?recs[i]=o:recs.unshift(o);n++});
+  sv(K.qR,qR);sv(K.recs,recs);render();statusOk();push();return'✅ '+n+' registro(s) importados'+(skip?', '+skip+' filas omitidas por falta de fecha o vendedor':'')+'.'}
+
+/* ---------- Conexión con Apps Script ---------- */
+function jsonp(action,extra,cb){
+  if(!cfg.url)return cb({ok:false,error:'Falta la URL del conector'});
+  const fn='jp_'+Date.now().toString(36)+Math.floor(Math.random()*1e4);let done=false;
+  const s=document.createElement('script');
+  const fin=d=>{if(done)return;done=true;clearTimeout(t);try{delete window[fn]}catch(e){}s.remove();cb(d)};
+  const t=setTimeout(()=>fin({ok:false,error:'Sin respuesta del conector'}),20000);
+  window[fn]=fin;s.onerror=()=>fin({ok:false,error:'No se pudo conectar con el conector'});
+  const q=new URLSearchParams(Object.assign({action,prefix:fn,sheetUrl:cfg.sheetUrl,_:Date.now()},extra||{}));
+  s.src=cfg.url+(cfg.url.includes('?')?'&':'?')+q;document.body.appendChild(s);
+}
+/* La Sheet es la fuente de verdad. Los cambios locales sin confirmar quedan en cola y no se pierden. */
+function pull(cb){
+  if(busy)return;busy=true;status(true,'sincronizando…');
+  jsonp('get',{},d=>{busy=false;
+    if(!d||!d.ok){status(false,(d&&d.error)||'Error de conexión');cb&&cb(false);return}
+    const del=new Set((d.deletedIds||[]).map(String));
+    const m=new Map((d.rows||[]).map(norm).filter(r=>r.id&&!del.has(r.id)).map(r=>[r.id,r]));
+    Object.keys(queue).forEach(id=>{
+      if(del.has(id)){delete queue[id];return}
+      if(m.has(id)&&same(m.get(id),queue[id]))delete queue[id];else m.set(id,queue[id]);
+    });
+    if(Array.isArray(d.route)){routeStops=d.route;sv(K.route,routeStops)}
+    dashOK=Array.isArray(d.registros);
+    if(dashOK){
+      const mr=new Map((d.registros||[]).map(nrec).filter(okR).map(r=>[r.id,r]));
+      Object.keys(qR).forEach(id=>{if(mr.has(id)&&sameO(mr.get(id),qR[id],KRs))delete qR[id];else mr.set(id,qR[id])});
+      recs=[...mr.values()];
+      const mm=new Map((d.metas||[]).map(nmet).filter(okM).map(r=>[r.id,r]));
+      Object.keys(qM).forEach(id=>{
+        if(mm.has(id)&&sameO(mm.get(id),qM[id],KMs)) delete qM[id];
+        else if(!mm.has(id)) mm.set(id,qM[id]);
+        // Si existe en Sheets y es diferente, la Sheet gana: no resucitar el dato viejo local.
+      });
+      mets=[...mm.values()];
+      if(Array.isArray(d.resolvedDuplicates)){
+        (d.resolvedDuplicates||[]).forEach(pair=>{dupResolved[String(pair)]=true});
+        sv(K.dups,dupResolved);
+      }
+      sv(K.recs,recs);sv(K.mets,mets);sv(K.qR,qR);sv(K.qM,qM)}
+    const vacia=!m.size&&!del.size;
+    rows=[...m.values()];sv(K.cache,rows);sv(K.queue,queue);statusOk();render();cb&&cb(true);
+    if(due()>0){let d='';try{d=localStorage.getItem('jpack3_agday')}catch(e){}if(d!==today()){try{localStorage.setItem('jpack3_agday',today())}catch(e){}openAg()}}
+    if(vacia&&!pull.asked){pull.asked=true;if(confirm('La Google Sheet está vacía. ¿Cargar la base inicial (9 fábricas + 160 distribuidores)?'))setTimeout(()=>loadBase(true),200)}
+  });
+}
+function push(){
+  if(!cfg.url)return;
+  const P=Object.values(queue),R=Object.values(qR),M=Object.values(qM);
+  if(!P.length&&!R.length&&!M.length)return;
+  status(true,'guardando en Google Sheets…');
+  const post=(action,rows)=>rows.length?fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,sheetUrl:cfg.sheetUrl,rows})}):Promise.resolve();
+  Promise.all([post('save',P),post('saveReg',R),post('saveMeta',M)]).then(()=>setTimeout(()=>pull(),1800)).catch(()=>statusOk());
+}
+function sync(){if(!cfg.url)return;pendN()?push():pull()}
+
+/* ---------- Guía de venta ---------- */
+const MATRIZ=[["Potes PP Inyectados","200, 300, 400, 600, 1000, 1150 ml","Heladerías, Postrerías, Delicatessen","Helado por pinta/litro, postres, frutos secos","Hermético antiderrame, resiste congelado"],["Bandejas Termoformadas","G38, G50, MH35, MH50 (PP/Black/PE)","Carnicerías, Cecinerías, Sushi Bar","Cortes cárnicos, sushi, platos preparados","Black PP resalta producto; PP/PE para MAP"],["Copas Polipropileno","Copa Garza 250 cc","Heladerías, Cafeterías, Catering","Servicio directo en mesa de helados/postres","Elegancia visual con resistencia irrompible"],["Bachas Grandes","Bacha 4,8 Litros","Heladerías Artesanales, Fábricas","Exhibición en vitrina congelada (-18°C)","Calce perfecto en pozos, plástico lavable"]];
+const SEGS=[{n:"Heladerías Artesanales y Pastelerías",p:["Bacha 4,8 Litros (Exhibición)","Potes PP 200ml a 1150ml (Delivery)","Copa Garza 250cc (Servicio Mesa)"],d:["Maestro Heladero","Jefe de Producción","Propietario / Gerente de Local"],o:"Envases que se cristalizan o rompen con el congelado (-18°C).",t:"PP inyectado flexible que mantiene hermeticidad sin trizarse."},{n:"Carnicerías, Cecinas y Platos Preparados",p:["Bandejas G38, G50, MH35, MH50","Bandejas Black PP y PP/PE"],d:["Encargado de Local","Jefe de Planta Frigorífica","Encargado de Control de Calidad"],o:"Filtración de jugos y pérdida del sellado en vitrina fría.",t:"Black PP resalta el color rojo cárnico; estructura PP/PE apta MAP."},{n:"Delivery Gourmet, Sushi & Dark Kitchens",p:["Bandejas G38 / G50 Black PP","Potes PP Cuadrados 1150 ml"],d:["Chef Ejecutivo / Propietario","Gerente de Operaciones Delivery","Encargado de Compras"],o:"Empaques humedecidos o deformados por salsas y vapor durante el traslado.",t:"Bandejas Black PP y potes PP cuadrados: rígidos, no se deforman con salsas ni vapor y presentan bien el producto."}];
+function renderGuia(){
+  const ul=a=>'<ul>'+a.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>';
+  $('guia').innerHTML=`<div class="seg"><h3>📦 Matriz: ¿quién compra qué?</h3><div class="tw"><table><thead><tr><th>Familia</th><th>Formatos</th><th>Comprador</th><th>Necesidad</th><th>Argumento</th></tr></thead><tbody>${MATRIZ.map(m=>`<tr><td><b>${esc(m[0])}</b></td>${m.slice(1).map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`+
+  SEGS.map(s=>`<div class="seg"><h3>🎯 ${esc(s.n)}</h3><div class="lb">Productos calificados</div>${ul(s.p)}<div class="lb">Perfil del decisor</div>${ul(s.d)}<div class="lb">Dolor del cliente</div><div>${esc(s.o)}</div><div class="pitch">💬 ${esc(s.t)}</div></div>`).join('');
+}
+
+/* ---------- Agenda ---------- */
+const addD=n=>{const [y,m,d]=today().split('-').map(Number),x=new Date(y,m-1,d+n);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const pend=()=>rows.filter(p=>p.fecha&&p.estado!=='cliente'&&p.estado!=='descartado');
+const due=()=>pend().filter(p=>p.fecha<=today()).length;
+const fmtD=f=>new Date(f+'T12:00:00').toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+function upd(id,patch){const o=rows.find(r=>r.id===id);if(!o)return;const r=norm(Object.assign({},o,patch));queue[id]=r;sv(K.queue,queue);rows=rows.map(x=>x.id===id?r:x);sv(K.cache,rows);render();statusOk();push()}
+function renderAg(){
+  const t=today(),tm=addD(1),only=$('agD').value,g={};
+  pend().filter(p=>!only||p.fecha===only).sort((a,b)=>a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0).forEach(p=>{const k=p.fecha<t?'late':p.fecha;(g[k]=g[k]||[]).push(p)});
+  const ks=Object.keys(g);
+  $('agL').innerHTML=ks.length?ks.map(k=>{
+    const lb=k==='late'?'⚠️ Atrasados':k===t?'Hoy':k===tm?'Mañana':fmtD(k);
+    return `<div class="gh ${k==='late'?'late':''}">${lb} (${g[k].length})</div>`+g[k].map(p=>{
+      const tel=(p.telefono||'').replace(/[^0-9+]/g,''),wa=tel.replace(/\D/g,'');
+      return `<div class="ag"><b>${esc(p.nombre)}</b> <span class="pill ${p.estado}">${p.estado}</span>
+      <div class="meta">${esc(p.region)}${k==='late'?' · venció '+esc(p.fecha):''}</div>${p.notas?`<div class="meta">📝 ${esc(p.notas.slice(0,90))}</div>`:''}
+      <div class="act">${tel?`<a class="btn" href="tel:${tel}">📞 Llamar</a>`:''}${wa?`<a class="btn" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${MSG}">📲 WhatsApp</a>`:''}${p.correo?`<a class="btn" href="mailto:${esc(p.correo)}?subject=${MAILSUB}">✉️ Correo</a>`:''}
+      <button class="btn" data-g="gest" data-id="${esc(p.id)}">✏️ Gestionar</button><button class="btn" data-g="d1" data-id="${esc(p.id)}">+1 día</button><button class="btn" data-g="d7" data-id="${esc(p.id)}">+1 semana</button><button class="btn" data-g="ok" data-id="${esc(p.id)}">✔ Hecho</button></div></div>`}).join('')
+  }).join(''):'<div class="empty">'+(only?'No hay seguimientos para ese día.':'No tienes seguimientos programados.')+'</div>';
+}
+function openAg(){$('agD').value='';renderAg();$('mAg').classList.add('on')}
+
+/* ---------- Vista ---------- */
+function visible(){
+  const q=na($('q').value),fe=$('fe').value,fc=$('fc').value,frubro=$('frubro').value,fprod=$('fprod').value,fprio=$('fprio').value,fatras=$('fatras')&&$('fatras').checked,t=today();
+  const prioRank=x=>({Alto:0,Medio:1,Bajo:2}[x]??3);
+  return rows.filter(p=>{
+    const tp=na(p.tipo);
+    if(tab==='hoy'&&!(p.fecha&&p.fecha<=t&&p.estado!=='cliente'&&p.estado!=='descartado'))return false;
+    if(tab==='fabrica'&&tp!=='fabrica')return false;
+    if(tab==='distribuidor'&&tp!=='distribuidor')return false;
+    if(tab==='manual'&&(tp==='fabrica'||tp==='distribuidor'||tp==='cliente b2c'))return false;
+    if(fe&&p.estado!==fe)return false;
+    if($('fr').value&&regOf(p)!==$('fr').value)return false;
+    if(fc&&comunaOf(p)!==fc)return false;
+    if(frubro&&na(p.tipo)!==na(frubro))return false;
+    if(fprio&&(p.prioridad||'')!==fprio)return false;
+    if(fatras&&!(p.fecha&&p.fecha<t&&p.estado!=='cliente'&&p.estado!=='descartado'))return false;
+    if(fprod){
+      const d=na(p.detalle||'');
+      if(fprod==='Potes PP'&&!(d.includes('pote')||d.includes('potes')))return false;
+      if(fprod==='Bandejas'&&!d.includes('bandej'))return false;
+      if(fprod==='Copas PP'&&!d.includes('copa'))return false;
+      if(fprod==='Bachas'&&!d.includes('bacha'))return false;
+    }
+    return !q||na([p.nombre,p.region,p.contacto,p.direccion,p.telefono,p.correo,p.detalle].join(' ')).includes(q);
+  }).sort((a,b)=>{
+    if(tab==='hoy'){
+      const ca=comunaOf(a),cb=comunaOf(b);
+      if(ca!==cb)return ca.localeCompare(cb,'es');
+    }
+    const pa=prioRank(a.prioridad),pb=prioRank(b.prioridad);
+    if(pa!==pb)return pa-pb;
+    return (a.fecha||'9')<(b.fecha||'9')?-1:1;
+  });
+}
+
+
+function dupKey(a,b){
+  const ids=[String(a.id),String(b.id)].sort();
+  return ids[0]+'||'+ids[1];
+}
+function findDups(){
+  const byTel={},byName={},dups=[],seen=new Set();
+  rows.forEach(p=>{
+    const tel=(p.telefono||'').replace(/\D/g,'');
+    if(tel.length>=9){
+      if(byTel[tel]&&byTel[tel].id!==p.id){
+        const pair=dupKey(byTel[tel],p);
+        if(!dupResolved[pair]&&!seen.has(pair)){dups.push([byTel[tel],p,'tel']);seen.add(pair)}
+      } else byTel[tel]=p;
+    }
+    const key=na(p.nombre)+'|'+comunaOf(p);
+    if(key.length>5){
+      if(byName[key]&&byName[key].id!==p.id){
+        const pair=dupKey(byName[key],p);
+        if(!dupResolved[pair]&&!seen.has(pair)){dups.push([byName[key],p,'nombre']);seen.add(pair)}
+      } else byName[key]=p;
+    }
+  });
+  return dups;
+}
+function renderDups(){
+  const dups=findDups();
+  $('dupF').innerHTML=dups.length?dups.map((d,i)=>{
+    const [a,b,why]=d;
+    return `<div class="ag" style="margin-bottom:10px">
+      <div><b>${i+1}. Posible duplicado por ${why==='tel'?'teléfono':'empresa + comuna'}</b></div>
+      <div class="meta" style="margin-top:6px"><b>${esc(a.nombre)}</b> · ${esc(a.tipo||'')} · ${esc(a.telefono||'Sin teléfono')} · ID ${esc(a.id)}</div>
+      <div class="meta"><b>${esc(b.nombre)}</b> · ${esc(b.tipo||'')} · ${esc(b.telefono||'Sin teléfono')} · ID ${esc(b.id)}</div>
+      <div class="act">
+        <button class="btn d" data-dup-delete="${esc(b.id)}" data-dup-pair="${esc(dupKey(a,b))}">🗑️ Eliminar el segundo</button>
+        <button class="btn" data-dup-delete="${esc(a.id)}" data-dup-pair="${esc(dupKey(a,b))}">🗑️ Eliminar el primero</button>
+        <button class="btn p" data-dup-keep="${esc(dupKey(a,b))}">✅ Son prospectos distintos</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty">No hay duplicados pendientes. Los pares marcados como distintos quedan ocultos.</div>';
+  $('mDup').classList.add('on');
+}
+async function resolveDupKeep(pair){
+  dupResolved[pair]=true;sv(K.dups,dupResolved);
+  if(cfg.url){
+    jsonp('resolveDup',{pair:pair},d=>{ if(!d||!d.ok) toast('Guardado localmente; no se pudo registrar en la Sheet'); renderDups(); render(); });
+  } else { renderDups();render(); }
+}
+function resolveDupDelete(id,pair){
+  const p=rows.find(r=>r.id===id);if(!p)return;
+  if(!confirm('¿Eliminar completamente "'+p.nombre+'"?\\n\\nSe archivará en "JPACK Eliminados" y desaparecerá de la app.'))return;
+  jsonp('archive',{id:p.id,row:JSON.stringify(p)},d=>{
+    if(d&&d.ok){
+      rows=rows.filter(r=>r.id!==p.id);delete queue[p.id];sv(K.cache,rows);sv(K.queue,queue);
+      delete dupResolved[pair];sv(K.dups,dupResolved);
+      renderDups();render();statusOk();toast('Duplicado eliminado y sincronizado');
+    }else toast((d&&d.error)||'No se pudo eliminar el duplicado');
+  });
+}
+
+function waMsg(p){
+  const t=na(p.tipo||'');
+  let m='Hola, le escribo de Jpack (envases PP/PE). ';
+  if(t.includes('helad')||t.includes('helader')) m+='Trabajamos potes PP herméticos que resisten congelado y copas para servicio en mesa. ¿Le interesa cotizar?';
+  else if(t.includes('carnic')||t.includes('cecin')) m+='Tenemos bandejas termoformadas (PP/Black/PE) ideales para cortes y cecinas. ¿Conversamos de formatos?';
+  else if(t.includes('sushi')) m+='Manejamos bandejas para sushi y platos preparados. ¿Le envío carta de formatos?';
+  else if(t.includes('pastel')||t.includes('repost')||t.includes('postr')) m+='Ofrecemos potes y copas PP para postres y pastelería. ¿Coordinamos una muestra?';
+  else if(t.includes('cafeter')||t.includes('café')) m+='Copas PP resistentes para postres y helados en mesa. ¿Le interesa?';
+  else m+='Quería conversar sobre sus necesidades de envases PP/PE. ¿Tiene un minuto?';
+  return encodeURIComponent(m);
+}
+
+function card(p){
+  const tel=(p.telefono||'').replace(/[^0-9+]/g,''),wa=tel.replace(/\D/g,'');
+  const msg=waMsg(p);
+  return `<div class="card"><div class="top"><div><h3>${esc(p.nombre)}</h3>
+  <div class="meta">${esc(p.tipo)} · ${esc(p.region)}${p.direccion?' · '+esc(p.direccion):''}</div>
+  ${p.contacto&&p.contacto!=='Sin dato'?`<div class="meta">👤 ${esc(p.contacto)}</div>`:''}${p.detalle?`<div class="meta">${esc(p.detalle)}</div>`:''}
+  ${queue[p.id]?'<div class="pend">⏳ Pendiente de enviar a Sheets</div>':''}</div><span class="pill ${p.estado}">${p.estado}</span>${p.prioridad?`<span class="pill" style="background:var(--yb);color:var(--yl)">${esc(p.prioridad)}</span>`:''}</div>
+  ${p.fecha?`<div class="meta">📅 Seguimiento: ${esc(p.fecha)}</div>`:''}${p.notas?`<div class="meta">📝 ${esc(p.notas.slice(0,100))}${p.notas.length>100?'…':''}</div>`:''}
+  ${p.prioridad?`<div class="meta">⭐ Prioridad: <b>${esc(p.prioridad)}</b></div>`:''}${p.foto?`<div class="meta"><a href="${esc(p.foto)}" target="_blank" rel="noopener">📷 Ver foto</a></div>`:''}
+  <div class="act">${tel?`<a class="btn" href="tel:${tel}">📞 Llamar</a>`:''}${wa?`<a class="btn" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${msg}">📲 WhatsApp</a>`:''}${p.correo?`<a class="btn" href="mailto:${esc(p.correo)}?subject=${MAILSUB}">✉️ Correo</a>`:''}<button class="btn" data-e="${esc(p.id)}">✏️ Gestionar</button>
+  <button class="btn" data-q="contactado" data-id="${esc(p.id)}" title="Marcar contactado">📞 Contactado</button>
+  <button class="btn" data-q="interesado" data-id="${esc(p.id)}" title="Marcar interesado">👍 Interesado</button>
+  <button class="btn" data-q="nocontesta" data-id="${esc(p.id)}" title="No contesta +1 día">🔕 No contesta</button>
+  <button class="btn" data-q="visitado" data-id="${esc(p.id)}" title="Visitado hoy">📍 Visitado</button></div></div>`;
+}
+function render(){
+  const n0=due(),b0=$('bAgN');b0.textContent=n0;b0.style.display=n0?'block':'none';
+  const dv=view==='dash';['kpis','tabs','fil','list','guia'].forEach(i=>$(i).style.display=dv?'none':'');
+  $('dash').style.display=dv?'block':'none';
+  if(dv){renderDash();if($('mAg').classList.contains('on'))renderAg();return}
+  const t=today(),c=s=>rows.filter(p=>p.estado===s).length;
+  const hoy=rows.filter(p=>p.fecha&&p.fecha<=t&&p.estado!=='cliente'&&p.estado!=='descartado').length;
+  const dups=findDups(),atras=rows.filter(p=>p.fecha&&p.fecha<t&&p.estado!=='cliente'&&p.estado!=='descartado').length;
+  $('kpis').innerHTML=[['Total',rows.length],['Para hoy',hoy],['Atrasados',atras],['Contactados',c('contactado')],['Interesados',c('interesado')],['Clientes',c('cliente')]].map(k=>`<div class="kpi"><b style="${k[0]==='Atrasados'&&k[1]?'color:var(--rd)':''}">${k[1]}</b><span>${k[0]}</span></div>`).join('')+`<button class="kpi" id="bDups" style="border:1px solid var(--yl);background:var(--s);color:var(--tx);cursor:pointer"><b style="color:var(--yl)">${dups.length}</b><span>⚠️ Posibles duplicados · ${dups.length?'revisar':'sin pendientes'}</span></button>`;
+  $('tabs').innerHTML=TABS.map(x=>`<button class="tab ${tab===x[0]?'on':''}" data-t="${x[0]}">${x[1]}</button>`).join('');
+  const sel=$('fr'),cur=sel.value,cnt={};rows.forEach(p=>{const r=regOf(p);cnt[r]=(cnt[r]||0)+1});
+  const order=REG.map(x=>x[0]).concat(['Sin región']).filter(r=>cnt[r]);
+  sel.innerHTML='<option value="">Todas las regiones ('+rows.length+')</option>'+order.map(r=>`<option value="${esc(r)}">${esc(r==='Sin región'?r:r==='Metropolitana'?'Región Metropolitana':'Región de '+r)} (${cnt[r]})</option>`).join('');
+  sel.value=order.includes(cur)?cur:'';
+  // Base filtrada por región (cascada)
+  const regSel=sel.value;
+  const baseReg=regSel?rows.filter(p=>regOf(p)===regSel):rows;
+  // Comunas solo de la región elegida
+  const selC=$('fc'),curC=selC.value,cntC={};
+  baseReg.forEach(p=>{const c=comunaOf(p);if(c)cntC[c]=(cntC[c]||0)+1});
+  const orderC=Object.keys(cntC).sort((a,b)=>a.localeCompare(b,'es'));
+  selC.innerHTML='<option value="">Todas las comunas'+(regSel?' de '+esc(regSel==='Metropolitana'?'RM':regSel):'')+'</option>'+orderC.map(c=>`<option value="${esc(c)}">${esc(c)} (${cntC[c]})</option>`).join('');
+  selC.value=orderC.includes(curC)?curC:'';
+  // Base filtrada por región + comuna
+  const comSel=selC.value;
+  const baseCom=comSel?baseReg.filter(p=>comunaOf(p)===comSel):baseReg;
+  // Rubros solo de región/comuna elegida (y filtra datos)
+  const selR=$('frubro'),curR=selR.value,cntR={};
+  baseCom.forEach(p=>{const t=(p.tipo||'').trim();if(t)cntR[t]=(cntR[t]||0)+1});
+  const orderR=Object.keys(cntR).sort((a,b)=>a.localeCompare(b,'es'));
+  selR.innerHTML='<option value="">Todos los rubros</option>'+orderR.map(t=>`<option value="${esc(t)}">${esc(t)} (${cntR[t]})</option>`).join('');
+  selR.value=orderR.includes(curR)?curR:'';
+  const nd_=due(),bn=$('bAgN');bn.textContent=nd_;bn.style.display=nd_?'block':'none';
+  const gu=tab==='guia',rt=tab==='hoy';$('fil').style.display=(gu||rt)?'none':'flex';$('list').style.display=(gu||rt)?'none':'block';$('ruta').style.display=rt?'block':'none';$('guia').style.display=gu?'block':'none';if(gu)renderGuia();if(rt)renderRuta();
+  const it=(gu||rt)?[]:visible();
+  if(!gu&&!rt)$('list').innerHTML=it.length?it.map(card).join(''):`<div class="empty">${!cfg.url?'Conecta tu Google Sheet con el botón ☁️ para cargar los prospectos.':'Sin resultados.'}</div>`;
+  if($('mAg').classList.contains('on'))renderAg();
+}
+
+/* ---------- JPACK 3.4 · Ruta de visitas ---------- */
+function saveRouteServer(){sv(K.route,routeStops);if(!cfg.url)return;fetch(cfg.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'saveRoute',sheetUrl:cfg.sheetUrl,routeDate:routeDate,rows:routeStops})}).then(()=>setTimeout(()=>pull(),1200)).catch(()=>toast('Ruta guardada en este equipo; revisa la conexión para sincronizar con Sheets'));}
+function routeForToday(){return routeStops.filter(x=>x.fecha===routeDate).sort((a,b)=>(+a.orden||0)-(+b.orden||0))}
+function distKm(a,b){const rad=n=>Number(n)*Math.PI/180,lat1=rad(a.lat),lat2=rad(b.lat),dlat=lat2-lat1,dlon=rad(b.lng)-rad(a.lng);const h=Math.sin(dlat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlon/2)**2;return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h))}
+function renderRuta(){
+  const stops=routeForToday(),visited=stops.filter(x=>x.estado==='visitado').length;
+  const picked=new Set(stops.map(x=>x.id));
+  const available=rows.filter(p=>!picked.has(p.id)).sort((a,b)=>({Alto:0,Medio:1,Bajo:2}[a.prioridad]??3)-({Alto:0,Medio:1,Bajo:2}[b.prioridad]??3));
+  $('ruta').innerHTML=`<div class="sec"><h3>🧭 Ruta de visitas · ${esc(routeDate)}</h3><div class="kpis">${kp('Paradas',stops.length)}${kp('Visitados',visited)}${kp('Pendientes',stops.length-visited)}</div><div class="fil"><label>Fecha <input id="rtDate" type="date" value="${esc(routeDate)}"></label><button class="btn" id="rtToday">Hoy</button><button class="btn" id="rtNew">＋ Nuevo prospecto</button><button class="btn p" id="rtSave">Guardar ruta</button></div><p class="meta">Agrega prospectos existentes abajo. El orden automático prioriza ubicación disponible (GPS guardado); si no hay coordenadas, ordena por comuna/prioridad. Puedes mover cada parada manualmente. Para direcciones dudosas, entra a Gestionar y corrígela.</p></div>
+  <div class="sec"><h3>➕ Agregar prospectos existentes</h3><div class="f"><input id="rtSearch" placeholder="Buscar empresa, comuna o dirección…"></div><div id="rtAvailable" style="max-height:280px;overflow:auto">${available.slice(0,80).map(p=>`<label class="ag" style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" data-rt-add="${esc(p.id)}" style="margin-top:4px"><span><b>${esc(p.nombre)}</b><span class="meta" style="display:block">${esc(p.tipo)} · ${esc(p.region)} · ${esc(p.direccion)}</span></span></label>`).join('')||'<div class="empty">No hay prospectos disponibles para agregar.</div>'}</div><button class="btn p" id="rtAddSelected">Agregar seleccionados a la ruta</button></div>
+  <div class="sec"><h3>📍 Secuencia de visita</h3><div id="rtStops">${stops.length?stops.map((x,i)=>{const p=rows.find(r=>r.id===x.id)||x;const q=encodeURIComponent([p.direccion,p.region,'Chile'].filter(Boolean).join(', '));const mapUrl=p.lat&&p.lng?`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`:`https://www.google.com/maps/search/?api=1&query=${q}`;return `<div class="card"><div class="top"><div><h3>${i+1}. ${esc(p.nombre||x.nombre)}</h3><div class="meta">${esc(p.region||'Sin comuna')} · ${esc(p.direccion||'Dirección pendiente')}</div><div class="meta">Estado: <b>${esc(x.estado||'pendiente')}</b>${x.visitaNota?' · '+esc(x.visitaNota):''}</div></div><span class="pill ${x.estado==='visitado'?'cliente':'contactado'}">${x.estado==='visitado'?'Visitado':'Pendiente'}</span></div><div class="act"><a class="btn" target="_blank" rel="noopener" href="${mapUrl}">🗺️ Navegar</a><button class="btn" data-rt-edit="${esc(x.id)}">✏️ Dirección / datos</button><button class="btn" data-rt-visit="${esc(x.id)}">📍 Registrar visita</button><button class="btn" data-rt-up="${esc(x.id)}" ${i===0?'disabled':''}>↑</button><button class="btn" data-rt-down="${esc(x.id)}" ${i===stops.length-1?'disabled':''}>↓</button><button class="btn d" data-rt-remove="${esc(x.id)}">Quitar</button></div></div>`}).join(''):'<div class="empty">Todavía no hay paradas. Agrega prospectos arriba o crea uno nuevo.</div>'}</div><div class="ma"><button class="btn" id="rtAuto">Ordenar automáticamente</button><button class="btn p" id="rtSave2">Guardar ruta y visitas</button></div></div>
+  <div class="sec"><h3>🧾 Resumen del día</h3><p>Paradas: <b>${stops.length}</b> · Visitadas: <b>${visited}</b> · Pendientes: <b>${stops.length-visited}</b></p><p class="meta">El registro de visita es manual. El GPS es opcional y solo se solicita cuando eliges registrarlo.</p></div>`;
+  $('rtDate').onchange=e=>{routeDate=e.target.value||today();renderRuta()};$('rtToday').onclick=()=>{routeDate=today();renderRuta()};$('rtNew').onclick=()=>openEd(null);$('rtSave').onclick=$('rtSave2').onclick=saveRouteServer;
+  $('rtAddSelected').onclick=()=>{const ids=[...$('rtAvailable').querySelectorAll('[data-rt-add]:checked')].map(e=>e.dataset.rtAdd);ids.forEach(id=>{const p=rows.find(r=>r.id===id);if(p&&!routeStops.some(x=>x.fecha===routeDate&&x.id===id))routeStops.push({fecha:routeDate,id:p.id,nombre:p.nombre,orden:routeForToday().length,estado:'pendiente',direccion:p.direccion,region:p.region,lat:'',lng:'',visitaNota:'',hora:''})});renderRuta();saveRouteServer();toast(ids.length+' prospecto(s) agregado(s)');};
+  $('rtSearch').oninput=()=>{const term=na($('rtSearch').value);$('rtAvailable').querySelectorAll('[data-rt-add]').forEach(el=>{el.closest('label').style.display=na(el.closest('label').innerText).includes(term)?'flex':'none'})};
+  $('rtAuto').onclick=()=>{let arr=routeForToday().slice();const coords=arr.filter(x=>Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.lng))&&x.lat!==''&&x.lng!=='');if(coords.length>1){const rest=arr.filter(x=>!coords.includes(x)),ordered=[coords.shift()];while(coords.length){const last=ordered[ordered.length-1];coords.sort((a,b)=>distKm(last,a)-distKm(last,b));ordered.push(coords.shift())}arr=ordered.concat(rest.sort((a,b)=>comunaOf(a).localeCompare(comunaOf(b),'es')))}else arr.sort((a,b)=>{const pa=rows.find(r=>r.id===a.id)||a,pb=rows.find(r=>r.id===b.id)||b;const ca=comunaOf(pa),cb=comunaOf(pb);if(ca!==cb)return ca.localeCompare(cb,'es');const pr={Alto:0,Medio:1,Bajo:2};return (pr[pa.prioridad]??3)-(pr[pb.prioridad]??3)||String(pa.nombre).localeCompare(String(pb.nombre),'es')});arr.forEach((x,i)=>x.orden=i);saveRouteServer();renderRuta();toast(coords.length?'':'Ruta ordenada: usa distancias entre GPS guardados; las paradas sin GPS quedan por comuna/prioridad.')};
+  $('rtStops').onclick=e=>{const b=e.target.closest('[data-rt-visit],[data-rt-edit],[data-rt-up],[data-rt-down],[data-rt-remove]');if(!b)return;const id=b.dataset.rtVisit||b.dataset.rtEdit||b.dataset.rtUp||b.dataset.rtDown||b.dataset.rtRemove;let x=routeStops.find(z=>z.fecha===routeDate&&z.id===id);if(!x)return;
+    if(b.dataset.rtEdit){openEd(id);return}if(b.dataset.rtRemove){routeStops=routeStops.filter(z=>!(z.fecha===routeDate&&z.id===id));routeForToday().forEach((z,i)=>z.orden=i);saveRouteServer();renderRuta();return}
+    if(b.dataset.rtUp||b.dataset.rtDown){const a=routeForToday(),i=a.findIndex(z=>z.id===id),j=i+(b.dataset.rtUp?-1:1);if(j>=0&&j<a.length){const tmp=a[i].orden;a[i].orden=a[j].orden;a[j].orden=tmp;saveRouteServer();renderRuta()}return}
+    if(b.dataset.rtVisit){const note=prompt('Resultado de la visita (opcional):','');const finish=pos=>{x.estado='visitado';x.hora=new Date().toISOString();x.visitaNota=note||'';if(pos){x.lat=pos.coords.latitude;x.lng=pos.coords.longitude}saveRouteServer();renderRuta();toast('Visita registrada')};if(navigator.geolocation&&confirm('¿Quieres adjuntar GPS a esta visita? (Opcional)'))navigator.geolocation.getCurrentPosition(finish,()=>{toast('No se obtuvo GPS; se guardará la visita sin ubicación');finish(null)},{enableHighAccuracy:true,timeout:10000});else finish(null)}
+  };
+}
+
+/* ---------- Edición ---------- */
+function openEd(id){
+  editId=id;const p=id?rows.find(r=>r.id===id):norm({tipo:'Prospecto manual'});if(!p)return;
+  $('eT').textContent=id?p.nombre:'＋ Añadir prospecto';$('eDel').style.display=id?'':'none';
+  $('eF').innerHTML=FORM.map(([k,l,t])=>{
+    let i;
+    if(t==='area')i=(k==='detalle'?`<input id="f_${k}" list="dl_detalle" autocomplete="off"><datalist id="dl_detalle">${[...new Set(rows.map(x=>x.detalle).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es')).map(v=>`<option value="${esc(v)}"></option>`).join('')}</datalist>`:`<textarea id="f_${k}" rows="3"></textarea>`);
+    else if(k==='region')i=`<input id="f_${k}" list="dl_region" autocomplete="off"><datalist id="dl_region">${[...new Set(rows.map(x=>x.region).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es')).map(v=>`<option value="${esc(v)}"></option>`).join('')}</datalist>`;
+    else if(t==='sel')i=`<select id="f_${k}">${['Prospecto manual','Fábrica','Distribuidor','Heladería','Carnicería','Sushi Bar','Pastelería','Cecinería','Postrería','Cafetería','Delicatessen'].map(o=>`<option>${o}</option>`).join('')}</select>`;
+    else if(t==='est')i=`<select id="f_${k}">${ST.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    else if(t==='prio')i=`<select id="f_${k}"><option value="">—</option>${['Alto','Medio','Bajo'].map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    else if(t==='date')i=`<div style="display:flex;gap:8px"><input id="f_${k}" type="date" style="flex:1"><button type="button" class="btn" onclick="document.getElementById('f_${k}').value=''">Quitar fecha</button></div>`;else i=`<input id="f_${k}" type="${t}">`;
+    return `<div class="f"><label>${l}</label>${i}</div>`}).join('');
+  FORM.forEach(([k])=>{const e=$('f_'+k);if(k==='tipo'&&![...e.options].some(o=>o.value===p.tipo)){e.add(new Option(p.tipo,p.tipo))}e.value=p[k]||''});
+  $('mEd').classList.add('on');
+}
+function saveEd(){
+  const nombre=$('f_nombre').value.trim();if(!nombre){toast('Ingresa el nombre de la empresa');return}
+  const old=editId?rows.find(r=>r.id===editId):null;
+  const r=norm(Object.assign({},old||{},{id:editId||'M:'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),fuente:old?old.fuente:'Manual'}));
+  FORM.forEach(([k])=>r[k]=$('f_'+k).value.trim());r.fecha=nd(r.fecha);
+  queue[r.id]=r;sv(K.queue,queue);
+  const i=rows.findIndex(x=>x.id===r.id);i>=0?rows[i]=r:rows.unshift(r);sv(K.cache,rows);
+  $('mEd').classList.remove('on');if(tab==='hoy'&&!routeStops.some(x=>x.fecha===routeDate&&x.id===r.id)){routeStops.push({fecha:routeDate,id:r.id,nombre:r.nombre,orden:routeForToday().length,estado:'pendiente',direccion:r.direccion,region:r.region,lat:'',lng:'',visitaNota:'',hora:''});sv(K.route,routeStops);saveRouteServer()}render();statusOk();toast('Guardado');push();if(tab==='hoy')renderRuta();
+}
+function delEd(){
+  const p=rows.find(r=>r.id===editId);if(!p)return;
+  if(!confirm('¿Eliminar "'+p.nombre+'"?\n\nSe moverá a la hoja "JPACK Eliminados" en Google Sheets y dejará de verse en la app.'))return;
+  // Enviar fila completa para archivar en Sheets
+  const payload={id:p.id,row:{id:p.id,fuente:p.fuente,tipo:p.tipo,nombre:p.nombre,region:p.region,direccion:p.direccion,contacto:p.contacto,telefono:p.telefono,correo:p.correo,detalle:p.detalle,estado:p.estado,fecha:p.fecha,notas:p.notas,prioridad:p.prioridad||'',foto:p.foto||''}};
+  jsonp('archive',payload,d=>{
+    if(d&&d.ok){rows=rows.filter(r=>r.id!==p.id);delete queue[p.id];sv(K.cache,rows);sv(K.queue,queue);$('mEd').classList.remove('on');render();statusOk();toast('Movido a JPACK Eliminados')}
+    else {
+      // Fallback: intentar delete clásico si el Script aún no tiene archive
+      jsonp('delete',{id:p.id},d2=>{
+        if(d2&&d2.ok){rows=rows.filter(r=>r.id!==p.id);delete queue[p.id];sv(K.cache,rows);sv(K.queue,queue);$('mEd').classList.remove('on');render();statusOk();toast('Eliminado (sin archivo — actualiza el Apps Script)')}
+        else toast((d&&d.error)||(d2&&d2.error)||'No se pudo eliminar. Revisa la conexión y el Apps Script.');
+      });
+    }
+  });
+}
+
+/* ---------- Eventos ---------- */
+$('list').onclick=e=>{
+  const b=e.target.closest('[data-e]');if(b){openEd(b.dataset.e);return}
+  const q=e.target.closest('[data-q]');if(q){
+    const id=q.dataset.id,act=q.dataset.q,t=today();
+    if(act==='contactado')upd(id,{estado:'contactado',fecha:addD(2),notas:((rows.find(r=>r.id===id)||{}).notas||'')});
+    else if(act==='interesado')upd(id,{estado:'interesado',fecha:addD(3)});
+    else if(act==='nocontesta')upd(id,{estado:'contactado',fecha:addD(1),notas:((rows.find(r=>r.id===id)||{}).notas||'')+' | No contesta '+t});
+    else if(act==='visitado')upd(id,{estado:'contactado',fecha:addD(5),notas:((rows.find(r=>r.id===id)||{}).notas||'')+' | Visitado '+t});
+    toast(act==='interesado'?'Marcado interesado':act==='nocontesta'?'No contesta · +1 día':act==='visitado'?'Visitado registrado':'Contactado');
+  }
+};
+$('tabs').onclick=e=>{const b=e.target.closest('[data-t]');if(b){tab=b.dataset.t;render()}};
+$('q').oninput=render;$('fe').onchange=render;$('fr').onchange=render;$('fc').onchange=render;$('frubro').onchange=render;
+$('fprod').onchange=render;$('fprio').onchange=render;$('fatras').onchange=render;
+$('bExpFil').onclick=()=>{
+  const it=visible();
+  dlCSV('jpack-filtrado-'+today()+'.csv',[['ID','Fuente','Tipo','Empresa','Región / Comuna','Dirección','Contacto','Teléfono','Correo','Detalle / Oportunidad','Estado','Próximo seguimiento','Notas','Prioridad']].concat(it.map(r=>[r.id,r.fuente,r.tipo,r.nombre,r.region,r.direccion,r.contacto,r.telefono,r.correo,r.detalle,r.estado,r.fecha,r.notas,r.prioridad||''])));
+  toast(it.length+' prospectos exportados');
+};
+$('fe').innerHTML+=ST.map(s=>`<option value="${s}">${s}</option>`).join('');
+$('bAg').onclick=openAg;$('agAll').onclick=()=>{$('agD').value='';renderAg()};$('agD').onchange=renderAg;
+$('agL').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;const id=b.dataset.id,a=b.dataset.g;
+  if(a==='gest'){$('mAg').classList.remove('on');openEd(id)}
+  else if(a==='d1')upd(id,{fecha:addD(1)});else if(a==='d7')upd(id,{fecha:addD(7)});else if(a==='ok')upd(id,{fecha:''})};
+buildForm('r',RF,$('rF'));buildForm('m',MF,$('mF'));
+$('dV').onchange=()=>{dsel.v=$('dV').value;renderDash()};$('dP').onchange=()=>{dsel.p=$('dP').value;renderDash()};
+$('dAddR').onclick=()=>openRec(null);$('dAddM').onclick=()=>openMet(null);$('rOk').onclick=saveRec;$('rDel').onclick=delRec;$('mOk').onclick=saveMet;$('mDel').onclick=delMet;
+$('dR').onclick=e=>{const b=e.target.closest('[data-er]');if(b)openRec(b.dataset.er)};
+$('dM').onclick=e=>{const b=e.target.closest('[data-em]');if(b)openMet(b.dataset.em)};
+$('dM').oninput=e=>{const s=e.target.closest('[data-st]');if(!s)return;const m=mets.find(x=>x.id===s.dataset.st);if(!m)return;const t=+s.dataset.t,d=parseInt(s.value,10),c=s.closest('tr').querySelector('[data-sv]');if(!(d>=1)){c.innerHTML='<span class="meta">ingresa los días</span>';return}stress[m.id]=d;c.innerHTML=stressCell(m,d,t)};
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;document.querySelectorAll('[data-v]').forEach(x=>x.classList.toggle('on',x===b));render()});
+$('dRep').onclick=openRep;$('rPdf').onclick=()=>{document.body.classList.add('pr');setTimeout(()=>{print();setTimeout(()=>document.body.classList.remove('pr'),400)},50)};$('rJpg').onclick=repJPG;
+$('rCp').onclick=()=>{(navigator.clipboard?navigator.clipboard.writeText(repTxt):Promise.reject()).then(()=>toast('Informe copiado')).catch(()=>prompt('Copia el informe:',repTxt))};
+$('bBk').onclick=()=>{$('bkMsg').textContent='';$('mBk').classList.add('on')};
+$('xPros').onclick=()=>dlCSV('jpack-prospectos-'+today()+'.csv',[['ID','Fuente','Tipo','Empresa','Región / Comuna','Dirección','Contacto','Teléfono','Correo','Detalle / Oportunidad','Estado','Próximo seguimiento','Notas']].concat(rows.map(r=>[r.id,r.fuente,r.tipo,r.nombre,r.region,r.direccion,r.contacto,r.telefono,r.correo,r.detalle,r.estado,r.fecha,r.notas])));
+$('xReg').onclick=()=>dlCSV('jpack-registros-'+today()+'.csv',[['Fecha','Vendedor','Visitados','Venta total sin IVA','Facturado sin IVA','Devoluciones','Clientes con compra','Clientes nuevos','Observaciones']].concat(recs.map(r=>[r.fecha,r.vendedor,r.visitados,r.ventaTotal,r.facturado,r.devolucion,r.compra,r.nuevos,r.obs])));
+$('xMet').onclick=()=>dlCSV('jpack-metas-'+today()+'.csv',[['Período','Vendedor','Meta venta','Días hábiles']].concat(mets.map(m=>[m.periodo,m.vendedor,m.meta,m.dias])));
+$('iPros').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>{$('bkMsg').textContent=importPros(t)});e.target.value=''};
+$('iReg').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>{$('bkMsg').textContent=importReg(t)});e.target.value=''};
+$('bAdd').onclick=()=>openEd(null);$('eOk').onclick=saveEd;$('eDel').onclick=delEd;
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='wgSave'){const g={contactos:+($('wgContactos').value||40),interes:+($('wgInteres').value||10)};localStorage.setItem(K.wgoal,JSON.stringify(g));toast('Meta semanal guardada');renderDash()}});
+document.addEventListener('click',e=>{
+  if(e.target.closest('#bDups')){renderDups();return}
+  const dm=e.target.closest('[data-dm]');if(dm){editMet=dm.dataset.dm;delMet();return}
+});
+$('mDup').addEventListener('click',e=>{
+  const del=e.target.closest('[data-dup-delete]'),keep=e.target.closest('[data-dup-keep]');
+  if(del){resolveDupDelete(del.dataset.dupDelete,del.dataset.dupPair);return}
+  if(keep){resolveDupKeep(keep.dataset.dupKeep);return}
+});
+$('bSync').onclick=()=>cfg.url?sync():$('bCfg').click();
+$('bCfg').onclick=()=>{$('cSheet').value=cfg.sheetUrl;$('cUrl').value=cfg.url;$('mCfg').classList.add('on')};
+$('cOk').onclick=()=>{
+  const s=$('cSheet').value.trim(),u=$('cUrl').value.trim();
+  if(!/^https:\/\/docs\.google\.com\/spreadsheets\/d\//.test(s)||!/^https:\/\/script\.google\.com\/.+\/exec$/.test(u)){toast('La URL del Apps Script debe terminar en /exec (no /dev)');return}
+  cfg={sheetUrl:s,url:u};sv(K.cfg,cfg);$('mCfg').classList.remove('on');pull();
+};
+$('cTest').onclick=()=>{
+  const u=$('cUrl').value.trim(),s=$('cSheet').value.trim(),m=$('cMsg'),bak=cfg;
+  if(!u){m.textContent='❌ Falta la URL del Apps Script';return}
+  m.textContent='Probando…';cfg={sheetUrl:s,url:u};
+  const info=' · La URL guardada tiene '+u.length+' caracteres y termina en "'+u.slice(-12)+'"';
+  jsonp('ping',{},d=>{cfg=bak;
+    if(d&&d.ok){m.textContent='✅ El conector responde (versión '+d.version+')'+info;return}
+    fetch(u+'?action=ping',{mode:'no-cors'}).then(()=>{m.textContent='⚠️ El navegador llega a Google pero no puede cargar el script: abre la app en Chrome o Safari (no dentro de WhatsApp) y desactiva bloqueadores.'+info})
+    .catch(()=>{m.textContent='❌ El navegador no logra comunicarse con Google (bloqueador, red o modo ahorro de datos).'+info})});
+};
+$('cShare').onclick=()=>{
+  const s=$('cSheet').value.trim()||cfg.sheetUrl,u=$('cUrl').value.trim()||cfg.url;
+  if(!s||!u){toast('Primero conecta la Sheet en este equipo');return}
+  const link=location.origin+location.pathname+'#cfg='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify({sheetUrl:s,url:u})))));
+  (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(()=>toast('Enlace copiado. Envíatelo por WhatsApp y ábrelo en el móvil')).catch(()=>prompt('Copia este enlace y ábrelo en el móvil:',link))};
+$('cBase').onclick=()=>{if(!cfg.url){toast('Conecta primero la Sheet');return}$('mCfg').classList.remove('on');loadBase(false)};
+$('cOff').onclick=()=>{cfg={sheetUrl:'',url:''};sv(K.cfg,cfg);$('mCfg').classList.remove('on');$('st').className='';$('st').textContent='Sin conectar';render()};
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>b.closest('.mb').classList.remove('on'));
+document.querySelectorAll('.mb').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('on')});
+let th=null;try{th=localStorage.getItem(K.theme)}catch(e){}
+if(th)document.documentElement.dataset.theme=th;
+$('bTheme').onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem(K.theme,n)}catch(e){}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync()});
+setInterval(()=>{if(!document.hidden&&!document.querySelector('.mb.on'))sync()},60000);
+render();if(cfg.url){statusOk();sync()}
+</script></body></html>
